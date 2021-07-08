@@ -42,7 +42,7 @@ final class SearchViewController: UIViewController {
 		let search = UISearchController(searchResultsController: nil)
 		search.searchResultsUpdater = self
 		search.obscuresBackgroundDuringPresentation = false
-		search.searchBar.placeholder = "Type something here to search"
+		search.searchBar.placeholder = "Введите ключевое слово для поиска"
 		search.searchBar.delegate = self
 		return search
 	}()
@@ -61,14 +61,24 @@ final class SearchViewController: UIViewController {
 			collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
 			collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
 			collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-			searchCounter.widthAnchor.constraint(equalToConstant: 60),
-			searchCounter.heightAnchor.constraint(equalToConstant: 40),
-			view.trailingAnchor.constraint(equalTo: searchCounter.centerXAnchor, constant: 25),
-			view.bottomAnchor.constraint(equalTo: searchCounter.bottomAnchor, constant: 8),
 		])
 
-		viewModel.start(presenter: self)
+		viewModel.start(reload: { [unowned self] in
+			self.update()
+		}, showMessage: { [unowned self] message in
+			self.update()
+			SearchToast.show(message: message, controller: self)
+		})
 		searchCounter.update(value: viewModel.count())
+	}
+
+	private func update() {
+		DispatchQueue.main.async { [weak self] in
+			self?.collectionView.reloadData()
+			if let count = self?.viewModel.count() {
+				self?.searchCounter.update(value: count)
+			}
+		}
 	}
 }
 
@@ -83,11 +93,22 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! SearchViewCell
+		let model = viewModel.model(indexPath.row)
+		cell.configureCell(model)
+		cell.artwork.image = viewModel.noArtworkImage
+		viewModel.loadImage(index: indexPath.row) { [weak cell] image in
+			cell?.artwork.image = image
+			cell?.layoutIfNeeded()
+		}
 		return cell
 	}
 
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		collectionView.cellForItem(at: indexPath)?.isSelected = true
+	}
+
+	func collectionView(_: UICollectionView, willDisplay _: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+		viewModel.checkLast(indexPath.row)
 	}
 }
 
@@ -96,7 +117,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
 extension SearchViewController: UISearchBarDelegate, UISearchResultsUpdating {
 	func updateSearchResults(for searchController: UISearchController) {
 		guard let text = searchController.searchBar.text else { return }
-		print(text)
+		searchCounter.searching()
 		viewModel.search(text)
 	}
 }

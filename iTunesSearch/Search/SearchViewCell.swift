@@ -11,13 +11,11 @@ import UIKit
 final class SearchViewCell: UICollectionViewCell {
 	let artwork: UIImageView = {
 		let imageView = UIImageView()
-		imageView.translatesAutoresizingMaskIntoConstraints = false
 		imageView.clipsToBounds = true
 		imageView.layer.borderColor = UIColor.lightGray.cgColor
 		imageView.layer.borderWidth = 0.8
 		imageView.layer.cornerRadius = 7
-		imageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
-		imageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+		imageView.frame = CGRect(x: 14, y: 6, width: 50, height: 50)
 		return imageView
 	}()
 
@@ -56,29 +54,21 @@ final class SearchViewCell: UICollectionViewCell {
 		contentView.addSubview(time)
 
 		NSLayoutConstraint.activate([
-			artwork.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
-			artwork.topAnchor.constraint(equalTo: topAnchor, constant: 6),
 			name.topAnchor.constraint(equalTo: topAnchor, constant: 6),
 			name.leadingAnchor.constraint(equalTo: artwork.trailingAnchor, constant: 10),
+			time.widthAnchor.constraint(greaterThanOrEqualToConstant: 20),
 			author.leadingAnchor.constraint(equalTo: artwork.trailingAnchor, constant: 10),
+			author.trailingAnchor.constraint(lessThanOrEqualTo: time.leadingAnchor, constant: 10),
 			bottomAnchor.constraint(equalTo: author.bottomAnchor, constant: 10),
 			bottomAnchor.constraint(equalTo: time.bottomAnchor, constant: 10),
-			trailingAnchor.constraint(greaterThanOrEqualTo: time.trailingAnchor, constant: 20),
-			trailingAnchor.constraint(greaterThanOrEqualTo: name.trailingAnchor, constant: 20),
+			trailingAnchor.constraint(equalTo: time.trailingAnchor, constant: 10),
+			trailingAnchor.constraint(greaterThanOrEqualTo: name.trailingAnchor, constant: 10),
 		])
 	}
 
 	@available(*, unavailable)
 	required init?(coder _: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
-	}
-
-	override func layoutSubviews() {
-		super.layoutSubviews()
-	}
-
-	override func awakeFromNib() {
-		super.awakeFromNib()
 	}
 
 	class func height() -> CGFloat {
@@ -98,7 +88,8 @@ final class SearchViewCell: UICollectionViewCell {
 	func configureCell(_ cellModel: SearchCellViewModel) {
 		name.text = cellModel.trackName
 		author.text = cellModel.artistName
-		time.text = cellModel.trackLenght
+		time.text = cellModel.trackLenght(cellModel.trackTimeMillis)
+		layoutIfNeeded()
 	}
 
 	override func prepareForReuse() {

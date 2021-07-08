@@ -12,6 +12,14 @@
 		A812CD8C2695CFAB001D8736 /* SearchViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A812CD8B2695CFAB001D8736 /* SearchViewCell.swift */; };
 		A812CD912695FE59001D8736 /* SearchCounterLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A812CD902695FE59001D8736 /* SearchCounterLabel.swift */; };
 		A812CD93269615D4001D8736 /* SearchCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A812CD92269615D4001D8736 /* SearchCellViewModel.swift */; };
+		A81603D626972B7800551C97 /* iTunesItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81603D526972B7800551C97 /* iTunesItem.swift */; };
+		A81603D926972E7600551C97 /* iTunesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81603D826972E7600551C97 /* iTunesList.swift */; };
+		A81603DB26972EC400551C97 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81603DA26972EC400551C97 /* SearchService.swift */; };
+		A81604362697350200551C97 /* SearchToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81604352697350200551C97 /* SearchToast.swift */; };
+		A816043826973DBA00551C97 /* SearchError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A816043726973DBA00551C97 /* SearchError.swift */; };
+		A816043A26973E7700551C97 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A816043926973E7700551C97 /* ImageService.swift */; };
+		A816043C26973F2900551C97 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A816043B26973F2900551C97 /* ImageCache.swift */; };
+		A816043F26976FB000551C97 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A816043E26976FB000551C97 /* Logger.swift */; };
 		A86875982695B356008C7D1D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86875972695B356008C7D1D /* SearchViewController.swift */; };
 		F46E6AE0267A466D00C30769 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E6ADF267A466D00C30769 /* AppDelegate.swift */; };
 		F46E6AE2267A466D00C30769 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E6AE1267A466D00C30769 /* SceneDelegate.swift */; };
@@ -26,6 +34,14 @@
 		A812CD8B2695CFAB001D8736 /* SearchViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewCell.swift; sourceTree = "<group>"; };
 		A812CD902695FE59001D8736 /* SearchCounterLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCounterLabel.swift; sourceTree = "<group>"; };
 		A812CD92269615D4001D8736 /* SearchCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellViewModel.swift; sourceTree = "<group>"; };
+		A81603D526972B7800551C97 /* iTunesItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iTunesItem.swift; sourceTree = "<group>"; };
+		A81603D826972E7600551C97 /* iTunesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iTunesList.swift; sourceTree = "<group>"; };
+		A81603DA26972EC400551C97 /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
+		A81604352697350200551C97 /* SearchToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchToast.swift; sourceTree = "<group>"; };
+		A816043726973DBA00551C97 /* SearchError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchError.swift; sourceTree = "<group>"; };
+		A816043926973E7700551C97 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
+		A816043B26973F2900551C97 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		A816043E26976FB000551C97 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		A86875972695B356008C7D1D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		F46E6ADC267A466D00C30769 /* iTunesSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iTunesSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46E6ADF267A466D00C30769 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -50,6 +66,7 @@
 		A812CD8D2695FB95001D8736 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				A81604352697350200551C97 /* SearchToast.swift */,
 				A812CD892695CB4D001D8736 /* SearchViewModel.swift */,
 				A86875972695B356008C7D1D /* SearchViewController.swift */,
 				A812CD902695FE59001D8736 /* SearchCounterLabel.swift */,
@@ -74,8 +91,29 @@
 				F46E6ADF267A466D00C30769 /* AppDelegate.swift */,
 				F46E6AE1267A466D00C30769 /* SceneDelegate.swift */,
 				A812CD872695C456001D8736 /* Router.swift */,
+				A816043E26976FB000551C97 /* Logger.swift */,
 			);
 			path = System;
+			sourceTree = "<group>";
+		};
+		A81603D726972B7F00551C97 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A81603D526972B7800551C97 /* iTunesItem.swift */,
+				A81603D826972E7600551C97 /* iTunesList.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A816043D2697523300551C97 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A816043726973DBA00551C97 /* SearchError.swift */,
+				A81603DA26972EC400551C97 /* SearchService.swift */,
+				A816043926973E7700551C97 /* ImageService.swift */,
+				A816043B26973F2900551C97 /* ImageCache.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		F46E6AD3267A466D00C30769 = {
@@ -97,6 +135,8 @@
 		F46E6ADE267A466D00C30769 /* iTunesSearch */ = {
 			isa = PBXGroup;
 			children = (
+				A816043D2697523300551C97 /* Services */,
+				A81603D726972B7F00551C97 /* Models */,
 				A812CD8F2695FBC8001D8736 /* System */,
 				A812CD8E2695FBAC001D8736 /* Resourses */,
 				A812CD8D2695FB95001D8736 /* Search */,
@@ -116,6 +156,7 @@
 				F46E6AD8267A466D00C30769 /* Sources */,
 				F46E6AD9267A466D00C30769 /* Frameworks */,
 				F46E6ADA267A466D00C30769 /* Resources */,
+				A812CD9426961681001D8736 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -171,19 +212,47 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A812CD9426961681001D8736 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftformat >/dev/null; then\nswiftformat --config \"$SRCROOT/.swiftformat.config\" --swiftversion \"5.3.2\" \"$SRCROOT\"\nelse\necho \"warning: SwiftFormat not installed\"\nexit 1\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F46E6AD8267A466D00C30769 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A816043C26973F2900551C97 /* ImageCache.swift in Sources */,
 				A812CD8C2695CFAB001D8736 /* SearchViewCell.swift in Sources */,
 				A812CD912695FE59001D8736 /* SearchCounterLabel.swift in Sources */,
 				A812CD882695C456001D8736 /* Router.swift in Sources */,
+				A816043826973DBA00551C97 /* SearchError.swift in Sources */,
+				A81603DB26972EC400551C97 /* SearchService.swift in Sources */,
+				A81603D626972B7800551C97 /* iTunesItem.swift in Sources */,
+				A816043F26976FB000551C97 /* Logger.swift in Sources */,
+				A81604362697350200551C97 /* SearchToast.swift in Sources */,
 				A812CD8A2695CB4D001D8736 /* SearchViewModel.swift in Sources */,
 				F46E6AE0267A466D00C30769 /* AppDelegate.swift in Sources */,
+				A816043A26973E7700551C97 /* ImageService.swift in Sources */,
 				A86875982695B356008C7D1D /* SearchViewController.swift in Sources */,
 				A812CD93269615D4001D8736 /* SearchCellViewModel.swift in Sources */,
 				F46E6AE2267A466D00C30769 /* SceneDelegate.swift in Sources */,
+				A81603D926972E7600551C97 /* iTunesList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

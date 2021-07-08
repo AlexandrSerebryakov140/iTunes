@@ -10,21 +10,19 @@ import Foundation
 struct SearchCellViewModel {
 	let trackName: String?
 	let artistName: String?
-	let trackLenght: String?
 	let artworkUrl: String?
+	let trackTimeMillis: Int?
 
-	//    init(_ item: iTunesItem) {
-	//        trackName = item.trackName
-	//        artistName = item.artistName
-	//        trackLenght = SearchCellViewModel.trackLenght(item.trackTimeMillis)
-	//        artworkUrl = item.artworkUrl100
-	//    }
+	init(_ item: iTunesItem) {
+		trackName = item.trackName
+		artistName = item.artistName
+		trackTimeMillis = item.trackTimeMillis
+		artworkUrl = item.artworkUrl100
+	}
 
 	// возвращает время в виде строки формата Ч:ММ:CC либо пустую строку
-	static func trackLenght(_ trackTimeMillis: Int?) -> String {
-		guard let timeMillis = trackTimeMillis else {
-			return ""
-		}
+	func trackLenght(_ trackTimeMillis: Int?) -> String {
+		guard let timeMillis = trackTimeMillis else { return "" }
 
 		let lenght: Int = timeMillis / 1_000
 		let seconds: Int = lenght % 60
