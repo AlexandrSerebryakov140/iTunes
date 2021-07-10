@@ -8,20 +8,18 @@
 import Foundation
 import UIKit
 
-final class SearchViewCell: UICollectionViewCell {
+final class SearchCell: UICollectionViewCell {
 	let artwork: UIImageView = {
-		let imageView = UIImageView()
+		let imageView = UIImageView(frame: .zero)
 		imageView.clipsToBounds = true
 		imageView.layer.borderColor = UIColor.lightGray.cgColor
 		imageView.layer.borderWidth = 0.8
 		imageView.layer.cornerRadius = 7
-		imageView.frame = CGRect(x: 14, y: 6, width: 50, height: 50)
 		return imageView
 	}()
 
 	let name: UILabel = {
-		let label = UILabel()
-		label.translatesAutoresizingMaskIntoConstraints = false
+		let label = UILabel(frame: .zero)
 		label.font = UIFont.systemFont(ofSize: 19.0, weight: .regular)
 		label.textColor = .black
 		label.text = "Название трека"
@@ -29,8 +27,7 @@ final class SearchViewCell: UICollectionViewCell {
 	}()
 
 	let author: UILabel = {
-		let label = UILabel()
-		label.translatesAutoresizingMaskIntoConstraints = false
+		let label = UILabel(frame: .zero)
 		label.font = UIFont.systemFont(ofSize: 15.0, weight: .regular)
 		label.textColor = .lightGray
 		label.text = "Автор трека"
@@ -38,8 +35,7 @@ final class SearchViewCell: UICollectionViewCell {
 	}()
 
 	let time: UILabel = {
-		let label = UILabel()
-		label.translatesAutoresizingMaskIntoConstraints = false
+		let label = UILabel(frame: .zero)
 		label.font = UIFont.systemFont(ofSize: 15.0, weight: .regular)
 		label.textColor = .lightGray
 		label.text = "02:00"
@@ -52,23 +48,18 @@ final class SearchViewCell: UICollectionViewCell {
 		contentView.addSubview(name)
 		contentView.addSubview(author)
 		contentView.addSubview(time)
-
-		NSLayoutConstraint.activate([
-			name.topAnchor.constraint(equalTo: topAnchor, constant: 6),
-			name.leadingAnchor.constraint(equalTo: artwork.trailingAnchor, constant: 10),
-			time.widthAnchor.constraint(greaterThanOrEqualToConstant: 20),
-			author.leadingAnchor.constraint(equalTo: artwork.trailingAnchor, constant: 10),
-			author.trailingAnchor.constraint(lessThanOrEqualTo: time.leadingAnchor, constant: 10),
-			bottomAnchor.constraint(equalTo: author.bottomAnchor, constant: 10),
-			bottomAnchor.constraint(equalTo: time.bottomAnchor, constant: 10),
-			trailingAnchor.constraint(equalTo: time.trailingAnchor, constant: 10),
-			trailingAnchor.constraint(greaterThanOrEqualTo: name.trailingAnchor, constant: 10),
-		])
 	}
 
 	@available(*, unavailable)
 	required init?(coder _: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+
+	public func configureCell(_ cellModel: SearchCellModel) {
+		name.text = cellModel.trackName
+		author.text = cellModel.artistName
+		time.text = cellModel.trackLenght(cellModel.trackTimeMillis)
+		layoutIfNeeded()
 	}
 
 	class func height() -> CGFloat {
@@ -85,15 +76,23 @@ final class SearchViewCell: UICollectionViewCell {
 		}
 	}
 
-	func configureCell(_ cellModel: SearchCellViewModel) {
-		name.text = cellModel.trackName
-		author.text = cellModel.artistName
-		time.text = cellModel.trackLenght(cellModel.trackTimeMillis)
-		layoutIfNeeded()
-	}
-
 	override func prepareForReuse() {
 		artwork.image = nil
 		super.prepareForReuse()
+	}
+
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		let layout = SearchCellLayout(
+			frame: frame,
+			name: name,
+			time: time,
+			author: author
+		)
+
+		artwork.frame = layout.artwork
+		name.frame = layout.name
+		time.frame = layout.time
+		author.frame = layout.author
 	}
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SearchCellViewModel {
+struct SearchCellModel {
 	let trackName: String?
 	let artistName: String?
 	let artworkUrl: String?

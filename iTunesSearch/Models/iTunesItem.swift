@@ -89,3 +89,10 @@ extension KeyedDecodingContainer {
 		}
 	}
 }
+
+extension iTunesItem {
+	// возвращает ссылку на обложку альбома в высоком разрешении
+	var artworkUrl600: String {
+		(artworkUrl100?.replacingOccurrences(of: "100x100", with: "600x600"))!
+	}
+}

@@ -8,14 +8,15 @@
 import Foundation
 import UIKit
 
-protocol SearchViewModel: AnyObject {
+protocol SearchViewModel {
 	func start(reload: @escaping () -> Void, showMessage: @escaping (String) -> Void)
 	func search(_ text: String)
 	func checkLast(_ index: Int)
 	func count() -> Int
-	func model(_ index: Int) -> SearchCellViewModel
+	func model(_ index: Int) -> SearchCellModel
 	func loadImage(index: Int, completion: @escaping (UIImage) -> Void)
 	var noArtworkImage: UIImage { get }
+	func toPreview(_ index: Int)
 }
 
 class SearchViewModelImpl: SearchViewModel {
@@ -47,9 +48,9 @@ class SearchViewModelImpl: SearchViewModel {
 		items.count
 	}
 
-	public func model(_ index: Int) -> SearchCellViewModel {
+	public func model(_ index: Int) -> SearchCellModel {
 		let item = items[index]
-		return SearchCellViewModel(item)
+		return SearchCellModel(item)
 	}
 
 	private func createList(list: iTunesList, request: String) {
@@ -77,7 +78,8 @@ class SearchViewModelImpl: SearchViewModel {
 			items = []
 			showMessage("Введите ключевые слова в строке поиска")
 			return
-		} else if text.count < 5 {
+		}
+		if text.count < 5 {
 			items = []
 			showMessage("В запросе должно быть не менее 5 символов")
 			return
@@ -114,13 +116,18 @@ class SearchViewModelImpl: SearchViewModel {
 	public var noArtworkImage = UIImage(named: "noArtwork")!
 
 	public func loadImage(index: Int, completion: @escaping (UIImage) -> Void) {
-		guard index <= items.count - 1 else { return }
 		let path = items[index].artworkUrl100
 		imageService.download(path: path) { [weak self] image, newPath in
+			guard index <= self?.items.count ?? 1 - 1 else { return }
 			guard newPath == self?.items[index].artworkUrl100 else { return }
 			DispatchQueue.main.async {
 				completion(image)
 			}
 		}
+	}
+
+	public func toPreview(_ index: Int) {
+		let item = items[index]
+		router.toPreview(item: item)
 	}
 }

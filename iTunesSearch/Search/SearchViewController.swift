@@ -28,7 +28,7 @@ final class SearchViewController: UIViewController {
 		viewLayout.scrollDirection = .vertical
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: viewLayout)
 		collectionView.translatesAutoresizingMaskIntoConstraints = false
-		collectionView.register(SearchViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+		collectionView.register(SearchCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 		collectionView.backgroundColor = .white
 		collectionView.delegate = self
 		collectionView.dataSource = self
@@ -84,7 +84,7 @@ final class SearchViewController: UIViewController {
 
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, layout _: UICollectionViewLayout, sizeForItemAt _: IndexPath) -> CGSize {
-		CGSize(width: collectionView.frame.size.width, height: SearchViewCell.height())
+		CGSize(width: collectionView.frame.size.width, height: SearchCell.height())
 	}
 
 	func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
@@ -92,7 +92,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! SearchViewCell
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! SearchCell
 		let model = viewModel.model(indexPath.row)
 		cell.configureCell(model)
 		cell.artwork.image = viewModel.noArtworkImage
@@ -105,6 +105,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		collectionView.cellForItem(at: indexPath)?.isSelected = true
+		viewModel.toPreview(indexPath.row)
 	}
 
 	func collectionView(_: UICollectionView, willDisplay _: UICollectionViewCell, forItemAt indexPath: IndexPath) {
