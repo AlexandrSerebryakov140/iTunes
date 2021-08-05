@@ -45,13 +45,13 @@ final class SearchToast {
 				toastLabel.topAnchor.constraint(equalTo: toastContainer.topAnchor, constant: 15),
 				toastContainer.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: 65),
 				toastContainer.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -65),
-				toastContainer.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: 120),
+				toastContainer.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: 140),
 			])
 
 			UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseIn, animations: {
 				toastContainer.alpha = 1.0
 			}, completion: { _ in
-				UIView.animate(withDuration: 0.5, delay: 1.5, options: .curveEaseOut, animations: {
+				UIView.animate(withDuration: 0.5, delay: 1.2, options: .curveEaseOut, animations: {
 					toastContainer.alpha = 0.0
 				}, completion: { _ in
 					toastContainer.removeFromSuperview()

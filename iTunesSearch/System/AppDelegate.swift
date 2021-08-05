@@ -13,7 +13,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	private lazy var router = Router()
 
 	func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-		// Override point for customization after application launch.
 		if #available(iOS 13, *) { return true }
 		let wind = UIWindow(frame: UIScreen.main.bounds)
 		wind.rootViewController = router.rootViewController()

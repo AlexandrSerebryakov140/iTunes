@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct iTunesItem: Codable {
+struct iTunesItem: Codable, Equatable, Hashable {
 	var type: String?
 	var wrapperType: String?
 	var kind: String?
