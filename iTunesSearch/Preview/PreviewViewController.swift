@@ -10,19 +10,13 @@ import UIKit
 
 final class PreviewViewController: UIViewController {
 	let viewModel: PreviewViewModel
+	var layout: PreviewViewControllerLayout
 
 	private lazy var imageView: UIImageView = {
 		let imageView = UIImageView(frame: .zero)
+		imageView.contentMode = .scaleAspectFit
+		imageView.translatesAutoresizingMaskIntoConstraints = false
 		return imageView
-	}()
-
-	private lazy var textView: UIView = {
-		let textView = UIView(frame: .zero)
-		textView.addSubview(stackView)
-		stackView.topAnchor.constraint(equalTo: textView.topAnchor, constant: 0).isActive = true
-		stackView.leadingAnchor.constraint(equalTo: textView.leadingAnchor, constant: 0).isActive = true
-		stackView.trailingAnchor.constraint(equalTo: textView.trailingAnchor, constant: 0).isActive = true
-		return textView
 	}()
 
 	private lazy var stackView: UIStackView = {
@@ -34,8 +28,16 @@ final class PreviewViewController: UIViewController {
 		return stackView
 	}()
 
-	init(viewModel: PreviewViewModel) {
+	private lazy var trackPlayerView: TrackPlayerView = {
+		let trackPlayer = TrackPlayerView(frame: .zero)
+		trackPlayer.playerButton.addTarget(self, action: #selector(didTapPlayerButton), for: [.touchUpInside])
+		trackPlayer.translatesAutoresizingMaskIntoConstraints = false
+		return trackPlayer
+	}()
+
+	init(viewModel: PreviewViewModel, layout: PreviewViewControllerLayout) {
 		self.viewModel = viewModel
+		self.layout = layout
 		super.init(nibName: nil, bundle: nil)
 	}
 
@@ -44,58 +46,65 @@ final class PreviewViewController: UIViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	override func viewDidLayoutSubviews() {
-		super.viewDidLayoutSubviews()
-
-		if UIApplication.shared.statusBarOrientation.isLandscape {
-			let width = view.frame.height * 0.8
-			let navBarHeight = navigationController?.navigationBar.frame.height
-			imageView.frame = CGRect(x: 20, y: 20 + navBarHeight!, width: width, height: width)
-			textView.frame = CGRect(x: 20 + width + 20, y: 20 + navBarHeight!, width: view.frame.width - width - navBarHeight! - 20, height: width)
-			stackView.alignment = .leading
-		} else {
-			let width = view.frame.width * 0.7
-			let navBarHeight = navigationController?.navigationBar.frame.height
-			imageView.frame = CGRect(x: (view.frame.width - width) / 2, y: 20 + navBarHeight!, width: width, height: width)
-			textView.frame = CGRect(x: (view.frame.width * 0.1) / 2, y: 20 + navBarHeight! + width + 20, width: view.frame.width * 0.9, height: view.frame.height - width - navBarHeight! - 20 - 20)
-			stackView.alignment = .center
-		}
-		stackView.layoutIfNeeded()
-		updateNavigationBar()
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		layout.layoutTrait(collection: view.traitCollection)
+		updateNavigationBar(item: viewModel.item, collection: view.traitCollection)
 	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		view.backgroundColor = .white
-		view.addSubview(imageView)
-		view.addSubview(textView)
+		setupView()
+		addToStackView(stackView: stackView, item: viewModel.item)
 
-		viewModel.start(updateImage: { image in
-			self.imageView.image = image
+		viewModel.start({ [weak self] image in
+			self?.imageView.image = image
 		})
 
+		viewModel.update(trackPlayerView)
+	}
+
+	private func setupView() {
+		view.backgroundColor = .white
+		view.addSubview(imageView)
+		view.addSubview(stackView)
+		view.addSubview(trackPlayerView)
+
+		layout.setupConstraints(view: view, image: imageView, stack: stackView, player: trackPlayerView)
+		layout.layoutTrait(collection: view.traitCollection)
+		updateNavigationBar(item: viewModel.item, collection: view.traitCollection)
+	}
+
+	private func updateNavigationBar(item: iTunesItem, collection: UITraitCollection) {
+		navigationItem.titleView = PreviewTitleLabel(item: item, collection: collection)
+	}
+
+	@objc
+	func didTapPlayerButton() {
+		viewModel.didTapButton()
+	}
+}
+
+// MARK: - Вывод данных из iTunesItem в стек PreviewViewController
+
+extension PreviewViewController {
+	private func addToStackView(stackView: UIStackView, item: iTunesItem) {
 		let item = viewModel.item
 
 		if let track = item.trackName {
-			stackView.addArrangedSubview(label(track, fontSize: 28.0, color: .black))
+			stackView.addArrangedSubview(addLabel(track, fontSize: 28.0, color: .black))
 		}
 
 		if let artist = item.artistName {
-			stackView.addArrangedSubview(label(artist, fontSize: 21.0, color: .darkGray))
+			stackView.addArrangedSubview(addLabel(artist, fontSize: 18.0, color: .darkGray))
 		}
 
 		if let album = item.collectionName {
-			stackView.addArrangedSubview(label(album, fontSize: 21.0, color: .black))
+			stackView.addArrangedSubview(addLabel(album, fontSize: 18.0, color: .black))
 		}
 	}
 
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		viewModel.update()
-		updateNavigationBar()
-	}
-
-	func label(_ text: String, fontSize: CGFloat, color: UIColor) -> UILabel {
+	private func addLabel(_ text: String, fontSize: CGFloat, color: UIColor) -> UILabel {
 		let label = UILabel()
 		label.textColor = color
 		label.textAlignment = .center
@@ -103,70 +112,6 @@ final class PreviewViewController: UIViewController {
 		label.text = text
 		label.lineBreakMode = .byWordWrapping
 		label.numberOfLines = 0
-		label.sizeToFit()
-		label.layoutIfNeeded()
-		return label
-	}
-
-	func updateNavigationBar() {
-		let item = viewModel.item
-
-		if let collectionName = item.collectionName {
-			self.navigationItem.titleView = previewTitle(name: item.trackName, album: collectionName)
-		} else {
-			self.title = item.trackName
-		}
-	}
-}
-
-extension PreviewViewController {
-	func isAlbum(_ orientation: UIDeviceOrientation) -> Bool {
-		(orientation == .landscapeLeft || orientation == .landscapeRight) ? true : false
-	}
-
-	func previewTitle(name: String?, album: String?) -> UILabel {
-		func addString(name: String?, font: UIFont, color: UIColor = .black) -> NSAttributedString {
-			let string = name ?? ""
-			let attr = [
-				NSAttributedString.Key.foregroundColor: color,
-				NSAttributedString.Key.font: font,
-			]
-			return NSAttributedString(string: string, attributes: attr)
-		}
-
-		func twoWord(name: String?, string: String?, separate: String, fontSize: CGFloat) -> NSAttributedString {
-			let nameColor: UIColor = .darkGray
-			let stringColor: UIColor = .lightGray
-			let firstFont = UIFont.systemFont(ofSize: fontSize, weight: .semibold)
-			let secondFont = UIFont.systemFont(ofSize: fontSize)
-			let firstString = addString(name: name, font: firstFont, color: nameColor)
-			let separateString = addString(name: separate, font: firstFont, color: nameColor)
-			let secondString = addString(name: string, font: secondFont, color: stringColor)
-
-			let attrString = NSMutableAttributedString(attributedString: firstString)
-			attrString.append(separateString)
-			attrString.append(secondString)
-
-			return attrString
-		}
-
-		func nameByOrientation() -> NSAttributedString {
-			if isAlbum(UIDevice.current.orientation) {
-				return twoWord(name: name, string: album, separate: " - ", fontSize: 13)
-			} else {
-				return twoWord(name: name, string: album, separate: "\n", fontSize: 16)
-			}
-		}
-
-		func linesByOrientation() -> Int {
-			isAlbum(UIDevice.current.orientation) ? 1 : 2
-		}
-
-		let label = UILabel()
-		label.backgroundColor = .clear
-		label.textAlignment = .center
-		label.attributedText = nameByOrientation()
-		label.numberOfLines = linesByOrientation()
 		return label
 	}
 }

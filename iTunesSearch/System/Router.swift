@@ -34,7 +34,7 @@ class Router {
 
 	public func toPreview(item: iTunesItem) {
 		let model = PreviewViewModelImpl(router: self, imageService: imageService, item: item)
-		let controller = PreviewViewController(viewModel: model)
+		let controller = PreviewViewController(viewModel: model, layout: PreviewViewControllerLayout())
 		viewController.pushViewController(controller, animated: true)
 	}
 }
