@@ -56,7 +56,7 @@ class SearchViewModelImpl: SearchViewModel {
 	private func createList(list: iTunesList, request: String) {
 		Logger.log(state: .info, message: "По запросу '\(request)' получено \(list.results.count) треков")
 
-		self.items = []
+		items = []
 		lastSearch = request
 		list.results.forEach { [weak self] item in
 			self?.items.append(item)
@@ -118,7 +118,7 @@ class SearchViewModelImpl: SearchViewModel {
 	public func loadImage(index: Int, completion: @escaping (UIImage) -> Void) {
 		let path = items[index].artworkUrl100
 		imageService.download(path: path) { [weak self] image, newPath in
-			guard index <= self?.items.count ?? 1 - 1 else { return }
+			guard index <= self?.items.count ?? 0 - 1 else { return }
 			guard newPath == self?.items[index].artworkUrl100 else { return }
 			DispatchQueue.main.async {
 				completion(image)

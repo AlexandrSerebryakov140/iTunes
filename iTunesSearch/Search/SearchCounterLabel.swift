@@ -32,8 +32,10 @@ final class SearchCounterLabel: UILabel {
 	}
 
 	func update(value: Int) {
-		text = String(value)
-		textColor = value == 0 ? .clear : .darkGray
+		DispatchQueue.main.async { [weak self] in
+			self?.text = String(value)
+			self?.textColor = value == 0 ? .clear : .darkGray
+		}
 	}
 
 	func searching() {

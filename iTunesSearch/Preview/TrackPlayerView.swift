@@ -13,6 +13,7 @@ protocol PreviewAudioDelegate: AnyObject {
 	func playerBeginPlay()
 	func playerStopPlay()
 	func playerUpdateData(string: String, float: Float)
+	func error()
 }
 
 class TrackPlayerView: UIView {
@@ -72,6 +73,12 @@ class TrackPlayerView: UIView {
 // MARK: - PreviewAudioDelegate
 
 extension TrackPlayerView: PreviewAudioDelegate {
+	func error() {
+		DispatchQueue.main.async { [weak self] in
+			self?.trackInfoLabel.text = "Error"
+		}
+	}
+
 	func playerBeginDownloadSong() {
 		DispatchQueue.main.async { [weak self] in
 			self?.trackInfoLabel.text = "Загрузка фрагмента"

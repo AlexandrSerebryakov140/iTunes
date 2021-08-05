@@ -10,68 +10,63 @@ import AudioToolbox
 import AVFoundation
 
 class TrackPreviewAudio: NSObject {
-	private var audioPlayer: AVAudioPlayer!
-	private var playerTimer: Timer!
-	weak var delegate: PreviewAudioDelegate?
+	private var audioPlayer: AVAudioPlayer?
 	public var updateState: (TrackPlayerState) -> Void = { _ in }
-
-	init(delegate: PreviewAudioDelegate?) {
-		self.delegate = delegate
-	}
+	public var updateTime: (String, Float) -> Void = { _, _ in }
 
 	func startAudioPlayer(_ previewFileURL: URL!) {
 		guard let preview = previewFileURL else { return }
 
 		do {
 			try audioPlayer = AVAudioPlayer(contentsOf: preview)
-			audioPlayer.delegate = self
-			updateState(.trackDownload)
+			audioPlayer?.delegate = self
+			audioPlayer?.prepareToPlay()
 		} catch let error as NSError {
 			print("Ошибка инициализации плеера:", error.localizedDescription)
 			updateState(.error)
 			return
 		}
 
-		audioPlayer.prepareToPlay()
-
-		DispatchQueue.main.async { [weak self] in
-			self?.stopPlay()
-		}
+		stopPlay()
 	}
 
 	public func stopPlay() {
+		audioPlayer?.stop()
+		stopTimer()
 		updateState(.trackStop)
-		audioPlayer.stop()
-		delegate?.playerStopPlay()
-		playerTimer?.invalidate()
-		updateTime()
 	}
 
 	public func beginPlay() {
+		audioPlayer?.play()
+		runTimer()
 		updateState(.trackPlay)
-		audioPlayer.play()
-		delegate?.playerBeginPlay()
+	}
+
+	private var playerTimer: Timer?
+
+	private func runTimer() {
 		playerTimer = Timer.scheduledTimer(
-			timeInterval: 0.05,
-			target: self,
-			selector: #selector(updateTime),
-			userInfo: nil,
+			withTimeInterval: 0.05,
 			repeats: true
-		)
+		) { [weak self] _ in
+			self?.updatePlayerTime()
+		}
 	}
 
-	@objc
-	private func updateTime() {
-		let str = String(format: "%.1f / %.1f", audioPlayer.currentTime, audioPlayer.duration)
-		let flt = Float(audioPlayer.currentTime / audioPlayer.duration)
-		delegate?.playerUpdateData(string: str, float: flt)
-	}
-
-	private func audioDisappear() {
-		updateState(.none)
-		audioPlayer?.stop()
+	private func stopTimer() {
 		playerTimer?.invalidate()
-		//  DataManager.removePreviewFile(previewFileURL: self.previewFileURL)
+		updatePlayerTime()
+	}
+
+	private func updatePlayerTime() {
+		guard let player = audioPlayer else { return }
+		let str = String(format: "%.1f / %.1f", player.currentTime, player.duration)
+		let flt = Float(player.currentTime / player.duration)
+		updateTime(str, flt)
+	}
+
+	deinit {
+		stopPlay()
 	}
 }
 
@@ -82,5 +77,7 @@ extension TrackPreviewAudio: AVAudioPlayerDelegate {
 		stopPlay()
 	}
 
-	func audioPlayerDecodeErrorDidOccur(_: AVAudioPlayer, error _: Error?) {}
+	func audioPlayerDecodeErrorDidOccur(_: AVAudioPlayer, error _: Error?) {
+		updateState(.error)
+	}
 }

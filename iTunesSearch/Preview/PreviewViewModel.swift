@@ -11,9 +11,8 @@ import UIKit
 enum TrackPlayerState: String {
 	case none // исходное состояние
 	case trackIsDownloaded // фрагмент трека загружается
-	case trackDownload // фрагмент трека загружен
+	case trackStop // трек загружен но остановлен
 	case trackPlay // трек играется
-	case trackStop // трек остановлен
 	case error // ошибка
 }
 
@@ -31,7 +30,8 @@ class PreviewViewModelImpl: PreviewViewModel {
 	private var previewAudio: TrackPreviewAudio?
 	private var updateImage: (UIImage) -> Void = { _ in }
 	private let downloader = TrackDownloader()
-    private weak var delegate: PreviewAudioDelegate?
+	private weak var delegate: PreviewAudioDelegate?
+	private var state: TrackPlayerState = .none
 
 	init(router: Router, imageService: ImageService, item: iTunesItem) {
 		self.router = router
@@ -53,9 +53,14 @@ class PreviewViewModelImpl: PreviewViewModel {
 	}
 
 	public func update(_ audioDelegate: PreviewAudioDelegate) {
-		previewAudio = TrackPreviewAudio(delegate: audioDelegate)
+		previewAudio = TrackPreviewAudio()
 		previewAudio?.updateState = { [weak self] state in
 			self?.state = state
+			self?.stateIsUpdate(state: state)
+		}
+
+		previewAudio?.updateTime = { [weak self] string, float in
+			self?.delegate?.playerUpdateData(string: string, float: float)
 		}
 
 		// Загрузка из кэша маленькой картинки
@@ -71,14 +76,24 @@ class PreviewViewModelImpl: PreviewViewModel {
 		delegate = audioDelegate
 	}
 
-	private var state: TrackPlayerState = .none
+	private func stateIsUpdate(state: TrackPlayerState) {
+		switch state {
+		case .trackStop:
+			delegate?.playerStopPlay()
+		case .trackPlay:
+			delegate?.playerBeginPlay()
+		case .error:
+			delegate?.error()
+		default:
+			break
+		}
+	}
 
 	public func didTapButton() {
 		switch state {
 		case .none:
 			trackBeginDownload()
-		case .trackDownload,
-			 .trackStop:
+		case .trackStop:
 			previewAudio?.beginPlay()
 		case .trackPlay:
 			previewAudio?.stopPlay()

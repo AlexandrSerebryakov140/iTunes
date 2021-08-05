@@ -50,9 +50,9 @@ struct PreviewViewControllerLayout {
 
 	public func layoutTrait(collection: UITraitCollection) {
 		// для ориентации .isPortrait
-        let horizontal = collection.horizontalSizeClass
-        let vertical = collection.verticalSizeClass
-        
+		let horizontal = collection.horizontalSizeClass
+		let vertical = collection.verticalSizeClass
+
 		if horizontal == .compact, vertical == .regular {
 			if !regularConstraints.isEmpty, regularConstraints[0].isActive {
 				NSLayoutConstraint.deactivate(regularConstraints)
@@ -65,7 +65,7 @@ struct PreviewViewControllerLayout {
 			}
 			NSLayoutConstraint.activate(regularConstraints)
 			// для ориентации .isIPad
-        } else if collection.userInterfaceIdiom == .pad {
+		} else if collection.userInterfaceIdiom == .pad {
 			if !regularConstraints.isEmpty, regularConstraints[0].isActive {
 				NSLayoutConstraint.deactivate(regularConstraints)
 			}
