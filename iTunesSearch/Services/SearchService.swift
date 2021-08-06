@@ -31,8 +31,6 @@ final class SearchServiceImpl: SearchService {
 			return
 		}
 
-//		cancelAllTasks()
-
 		session.dataTask(with: request, completionHandler: { data, _, error in
 
 			if let requestError = error as NSError? {
@@ -84,13 +82,5 @@ final class SearchServiceImpl: SearchService {
 		guard let url = searchURL(escaped: escaped, offset: offset) else { return nil }
 		let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 20)
 		return request
-	}
-
-	private func cancelAllTasks() {
-		session.getAllTasks { tasks in
-			tasks.forEach { item in
-				item.cancel()
-			}
-		}
 	}
 }

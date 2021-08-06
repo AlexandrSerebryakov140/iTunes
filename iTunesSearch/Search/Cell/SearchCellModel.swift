@@ -12,16 +12,20 @@ struct SearchCellModel {
 	let artistName: String?
 	let artworkUrl: String?
 	let trackTimeMillis: Int?
+	let trackLenght: String
 
 	init(_ item: iTunesItem) {
 		trackName = item.trackName
 		artistName = item.artistName
 		trackTimeMillis = item.trackTimeMillis
 		artworkUrl = item.artworkUrl100
+		trackLenght = SearchCellModel.trackLenght(item.trackTimeMillis)
 	}
+}
 
+extension SearchCellModel {
 	// возвращает время в виде строки формата Ч:ММ:CC либо пустую строку
-	func trackLenght(_ trackTimeMillis: Int?) -> String {
+	static func trackLenght(_ trackTimeMillis: Int?) -> String {
 		guard let timeMillis = trackTimeMillis else { return "" }
 
 		let lenght: Int = timeMillis / 1_000

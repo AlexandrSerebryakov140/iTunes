@@ -55,11 +55,23 @@ final class SearchCell: UICollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	public func configureCell(_ cellModel: SearchCellModel) {
+	public func configureCell(_ cellModel: SearchCellModel, noArtworkImage: UIImage) {
+		artworkUrl = cellModel.artworkUrl
 		name.text = cellModel.trackName
 		author.text = cellModel.artistName
-		time.text = cellModel.trackLenght(cellModel.trackTimeMillis)
+		time.text = cellModel.trackLenght
+		artwork.image = noArtworkImage
 		layoutIfNeeded()
+	}
+
+	private var artworkUrl: String?
+
+	public func setupImage(image: UIImage, path: String) {
+		DispatchQueue.main.async { [weak self] in
+			if self?.artworkUrl != path { return }
+			self?.artwork.image = image
+			self?.layoutIfNeeded()
+		}
 	}
 
 	class func height() -> CGFloat {

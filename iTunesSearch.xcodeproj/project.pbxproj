@@ -26,6 +26,7 @@
 		A816043A26973E7700551C97 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A816043926973E7700551C97 /* ImageService.swift */; };
 		A816043C26973F2900551C97 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A816043B26973F2900551C97 /* ImageCache.swift */; };
 		A816043F26976FB000551C97 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A816043E26976FB000551C97 /* Logger.swift */; };
+		A86374BB26BC937800FFAAF0 /* SearchCollectionViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86374BA26BC937800FFAAF0 /* SearchCollectionViewAdapter.swift */; };
 		A86875982695B356008C7D1D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86875972695B356008C7D1D /* SearchViewController.swift */; };
 		A887FCF326A3872500CC3D52 /* TrackDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A887FCF226A3872500CC3D52 /* TrackDownloader.swift */; };
 		A8C6512C269F418F007C2751 /* PreviewViewControllerLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C6512B269F418F007C2751 /* PreviewViewControllerLayout.swift */; };
@@ -56,6 +57,7 @@
 		A816043926973E7700551C97 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		A816043B26973F2900551C97 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		A816043E26976FB000551C97 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		A86374BA26BC937800FFAAF0 /* SearchCollectionViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionViewAdapter.swift; sourceTree = "<group>"; };
 		A86875972695B356008C7D1D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		A887FCF226A3872500CC3D52 /* TrackDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackDownloader.swift; sourceTree = "<group>"; };
 		A8C6512B269F418F007C2751 /* PreviewViewControllerLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewControllerLayout.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				A86875972695B356008C7D1D /* SearchViewController.swift */,
+				A86374BA26BC937800FFAAF0 /* SearchCollectionViewAdapter.swift */,
 				A812CD892695CB4D001D8736 /* SearchViewModel.swift */,
 				A812CD902695FE59001D8736 /* SearchCounterLabel.swift */,
 				A81604352697350200551C97 /* SearchToast.swift */,
@@ -114,11 +117,11 @@
 		A8131B302699AD1800AB0A53 /* Preview */ = {
 			isa = PBXGroup;
 			children = (
-				A809A32D269CAE6100519D6B /* TrackPlayerView.swift */,
 				A8131B2E2699AD1000AB0A53 /* PreviewViewController.swift */,
 				A8C6512B269F418F007C2751 /* PreviewViewControllerLayout.swift */,
 				A8131B312699AD4300AB0A53 /* PreviewViewModel.swift */,
 				A809A333269CAECD00519D6B /* TrackPreviewAudio.swift */,
+				A809A32D269CAE6100519D6B /* TrackPlayerView.swift */,
 				A809A32B269CA82B00519D6B /* PreviewTitleLabel.swift */,
 			);
 			path = Preview;
@@ -290,6 +293,7 @@
 				A81603D626972B7800551C97 /* iTunesItem.swift in Sources */,
 				A816043F26976FB000551C97 /* Logger.swift in Sources */,
 				A81604362697350200551C97 /* SearchToast.swift in Sources */,
+				A86374BB26BC937800FFAAF0 /* SearchCollectionViewAdapter.swift in Sources */,
 				A812CD8A2695CB4D001D8736 /* SearchViewModel.swift in Sources */,
 				F46E6AE0267A466D00C30769 /* AppDelegate.swift in Sources */,
 				A816043A26973E7700551C97 /* ImageService.swift in Sources */,

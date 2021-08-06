@@ -33,7 +33,7 @@ public final class ImageServiceImpl: ImageService {
 		}
 
 		// проверяем есть ли закешированное изображение, если есть - возвращаем его
-		if let imageFromCache = self.imageCache.imageForKey(downloadPath as NSString) {
+		if let imageFromCache = self.imageCache.imageForKey(path: downloadPath) {
 			completion(imageFromCache, downloadPath)
 			return
 		}
@@ -54,7 +54,7 @@ public final class ImageServiceImpl: ImageService {
 			}
 
 			// добавляем закачанное и распарсенное изоображение в кэш
-			self?.imageCache.addImageForKey(downloadPath as NSString, image: image)
+			self?.imageCache.addImageForKey(path: downloadPath, image: image)
 
 			completion(image, downloadPath)
 

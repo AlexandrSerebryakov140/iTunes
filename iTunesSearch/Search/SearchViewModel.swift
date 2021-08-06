@@ -8,43 +8,38 @@
 import Foundation
 import UIKit
 
-protocol SearchViewModel {
-	func start(reload: @escaping () -> Void, showMessage: @escaping (String) -> Void)
+protocol SearchViewModel: AnyObject {
+	func start()
 	func search(_ text: String)
+
 	func checkLast(_ index: Int)
-	func count() -> Int
+	var count: Int { get }
 	func model(_ index: Int) -> SearchCellModel
-	func loadImage(index: Int, completion: @escaping (UIImage) -> Void)
-	var noArtworkImage: UIImage { get }
 	func toPreview(_ index: Int)
+
+	var animatedReload: ([IndexPath]) -> Void { get set }
+	var showMessage: (String) -> Void { get set }
 }
 
 class SearchViewModelImpl: SearchViewModel {
 	private let searchService: SearchService
-	private let imageService: ImageService
 	private let router: Router
-	private var reload: () -> Void = {}
-	private var showMessage: (String) -> Void = { _ in }
+	public var animatedReload: ([IndexPath]) -> Void = { _ in }
+	public var showMessage: (String) -> Void = { _ in }
 	private var items: [iTunesItem] = []
 	private var lastSearch = ""
 	private var isUpdate = false
 
-	init(router: Router, searchService: SearchService, imageService: ImageService) {
+	init(router: Router, searchService: SearchService) {
 		self.router = router
 		self.searchService = searchService
-		self.imageService = imageService
 	}
 
-	public func start(
-		reload: @escaping () -> Void,
-		showMessage: @escaping (String) -> Void
-	) {
-		self.reload = reload
-		self.showMessage = showMessage
+	public func start() {
 		search("")
 	}
 
-	public func count() -> Int {
+	public var count: Int {
 		items.count
 	}
 
@@ -53,24 +48,41 @@ class SearchViewModelImpl: SearchViewModel {
 		return SearchCellModel(item)
 	}
 
+	private func updateItems(list: iTunesList) -> [IndexPath] {
+		let first = items.count
+		let second = items.count + list.results.count - 1
+
+		var array: [IndexPath] = []
+
+		for index in first ... second {
+			let indexPath = IndexPath(row: index, section: 0)
+			array.append(indexPath)
+		}
+
+		return array
+	}
+
+	private func addItems(list: iTunesList) {
+		let updateItems = updateItems(list: list)
+
+		list.results.forEach { [weak self] item in
+			self?.items.append(item)
+		}
+
+		animatedReload(updateItems)
+	}
+
 	private func createList(list: iTunesList, request: String) {
 		Logger.log(state: .info, message: "По запросу '\(request)' получено \(list.results.count) треков")
 
 		items = []
 		lastSearch = request
-		list.results.forEach { [weak self] item in
-			self?.items.append(item)
-		}
-		reload()
+		addItems(list: list)
 	}
 
 	private func updateList(list: iTunesList) {
 		Logger.log(state: .info, message: "Добавлено ещё \(list.results.count) треков")
-
-		list.results.forEach { [weak self] item in
-			self?.items.append(item)
-		}
-		reload()
+		addItems(list: list)
 	}
 
 	public func search(_ text: String) {
@@ -85,7 +97,7 @@ class SearchViewModelImpl: SearchViewModel {
 			return
 		}
 
-		self.searchService.beginSearch(search: text, offset: 0, completion: { [weak self] result in
+		searchService.beginSearch(search: text, offset: 0, completion: { [weak self] result in
 			switch result {
 			case let .success(list):
 				self?.createList(list: list, request: text)
@@ -111,19 +123,6 @@ class SearchViewModelImpl: SearchViewModel {
 			}
 			self?.isUpdate = false
 		})
-	}
-
-	public var noArtworkImage = UIImage(named: "noArtwork")!
-
-	public func loadImage(index: Int, completion: @escaping (UIImage) -> Void) {
-		let path = items[index].artworkUrl100
-		imageService.download(path: path) { [weak self] image, newPath in
-			guard index <= self?.items.count ?? 0 - 1 else { return }
-			guard newPath == self?.items[index].artworkUrl100 else { return }
-			DispatchQueue.main.async {
-				completion(image)
-			}
-		}
 	}
 
 	public func toPreview(_ index: Int) {

@@ -16,14 +16,14 @@ final class ImageCache: NSCache<NSString, UIImage> {
 		self.totalCostLimit = 50 * 1_024 * 1_024 // Максимальный объем памяти 50 Мб
 	}
 
-	public func imageForKey(_ path: NSString) -> UIImage! {
+	public func imageForKey(path: String) -> UIImage! {
 		if let imageFromCache = object(forKey: path as NSString) {
 			return imageFromCache
 		}
 		return nil
 	}
 
-	public func addImageForKey(_ path: NSString, image: UIImage) {
+	public func addImageForKey(path: String, image: UIImage) {
 		func costFor(image: UIImage) -> Int {
 			guard let imageRef = image.cgImage else {
 				return 0
