@@ -29,13 +29,14 @@ class PreviewViewModelImpl: PreviewViewModel {
 	public var item: iTunesItem
 	private var previewAudio: TrackPreviewAudio?
 	private var updateImage: (UIImage) -> Void = { _ in }
-	private let downloader = TrackDownloader()
+	private let downloader: TrackDownloader
 	private weak var delegate: PreviewAudioDelegate?
 	private var state: TrackPlayerState = .none
 
-	init(router: Router, imageService: ImageService, item: iTunesItem) {
+	init(router: Router, imageService: ImageService, downloader: TrackDownloader, item: iTunesItem) {
 		self.router = router
 		self.imageService = imageService
+		self.downloader = downloader
 		self.item = item
 //		print(item)
 	}

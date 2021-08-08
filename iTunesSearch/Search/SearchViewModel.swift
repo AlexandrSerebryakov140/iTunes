@@ -9,23 +9,26 @@ import Foundation
 import UIKit
 
 protocol SearchViewModel: AnyObject {
+	var searchBegin: () -> Void { get set }
+	var searchComplete: ([IndexPath]) -> Void { get set }
+	var showMessage: (String) -> Void { get set }
+
 	func start()
 	func search(_ text: String)
-
 	func checkLast(_ index: Int)
-	var count: Int { get }
 	func model(_ index: Int) -> SearchCellModel
 	func toPreview(_ index: Int)
 
-	var animatedReload: ([IndexPath]) -> Void { get set }
-	var showMessage: (String) -> Void { get set }
+	var count: Int { get }
 }
 
 class SearchViewModelImpl: SearchViewModel {
+	public var searchBegin: () -> Void = {}
+	public var searchComplete: ([IndexPath]) -> Void = { _ in }
+	public var showMessage: (String) -> Void = { _ in }
+
 	private let searchService: SearchService
 	private let router: Router
-	public var animatedReload: ([IndexPath]) -> Void = { _ in }
-	public var showMessage: (String) -> Void = { _ in }
 	private var items: [iTunesItem] = []
 	private var lastSearch = ""
 	private var isUpdate = false
@@ -48,7 +51,7 @@ class SearchViewModelImpl: SearchViewModel {
 		return SearchCellModel(item)
 	}
 
-	private func updateItems(list: iTunesList) -> [IndexPath] {
+	private func updateItemsList(list: iTunesList) -> [IndexPath] {
 		let first = items.count
 		let second = items.count + list.results.count - 1
 
@@ -63,13 +66,13 @@ class SearchViewModelImpl: SearchViewModel {
 	}
 
 	private func addItems(list: iTunesList) {
-		let updateItems = updateItems(list: list)
+		let updateItems = updateItemsList(list: list)
 
 		list.results.forEach { [weak self] item in
 			self?.items.append(item)
 		}
 
-		animatedReload(updateItems)
+		searchComplete(updateItems)
 	}
 
 	private func createList(list: iTunesList, request: String) {
@@ -86,6 +89,8 @@ class SearchViewModelImpl: SearchViewModel {
 	}
 
 	public func search(_ text: String) {
+		if lastSearch == text { return }
+
 		if text.isEmpty {
 			items = []
 			showMessage("Введите ключевые слова в строке поиска")
@@ -96,6 +101,8 @@ class SearchViewModelImpl: SearchViewModel {
 			showMessage("В запросе должно быть не менее 5 символов")
 			return
 		}
+
+		searchBegin()
 
 		searchService.beginSearch(search: text, offset: 0, completion: { [weak self] result in
 			switch result {

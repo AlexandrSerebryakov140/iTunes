@@ -8,8 +8,11 @@
 import UIKit
 
 final class SearchCounterLabel: UILabel {
-	override init(frame: CGRect) {
-		super.init(frame: frame)
+	private weak var viewModel: SearchViewModel?
+
+	init(viewModel: SearchViewModel?) {
+		self.viewModel = viewModel
+		super.init(frame: .zero)
 		font = UIFont.systemFont(ofSize: 18.0)
 		numberOfLines = 1
 		textAlignment = .center
@@ -31,15 +34,18 @@ final class SearchCounterLabel: UILabel {
 		frame = CGRect(x: x, y: y, width: width, height: height)
 	}
 
-	func update(value: Int) {
+	public func update() {
+		guard let count = viewModel?.count else { return }
 		DispatchQueue.main.async { [weak self] in
-			self?.text = String(value)
-			self?.textColor = value == 0 ? .clear : .darkGray
+			self?.text = String(count)
+			self?.textColor = count == 0 ? .clear : .darkGray
 		}
 	}
 
-	func searching() {
-		text = "!"
-		textColor = .darkGray
+	public func searching() {
+		DispatchQueue.main.async { [weak self] in
+			self?.text = "!"
+			self?.textColor = .darkGray
+		}
 	}
 }

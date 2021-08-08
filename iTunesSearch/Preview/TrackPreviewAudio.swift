@@ -1,9 +1,8 @@
 //
-//  PreviewAudio.swift
-//  iTunesSearchSwift
+//  PreviewViewModel.swift
+//  iTunesSearch
 //
-//  Created by Серебряков Александр on 28.07.2018.
-//  Copyright © 2018. All rights reserved.
+//  Created by Alexandr Serebryakov on 10.07.2021.
 //
 
 import AudioToolbox

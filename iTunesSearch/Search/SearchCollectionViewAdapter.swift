@@ -2,7 +2,7 @@
 //  CollectionViewAdapter.swift
 //  iTunesSearch
 //
-//  Created by Alexandr on 06.08.2021.
+//  Created by Alexandr Serebryakov on 06.08.2021.
 //
 
 import Foundation
@@ -20,7 +20,6 @@ class SearchCollectionViewAdapter: NSObject {
 
 	public func setup(collectionView: UICollectionView) {
 		self.collectionView = collectionView
-		self.collectionView?.translatesAutoresizingMaskIntoConstraints = false
 		self.collectionView?.register(SearchCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 		self.collectionView?.backgroundColor = .white
 		self.collectionView?.keyboardDismissMode = .onDrag
@@ -32,6 +31,7 @@ class SearchCollectionViewAdapter: NSObject {
 	public func subview(view: UIView) {
 		guard let collection = collectionView else { return }
 
+		collection.translatesAutoresizingMaskIntoConstraints = false
 		view.addSubview(collection)
 		NSLayoutConstraint.activate([
 			collection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
@@ -50,7 +50,7 @@ class SearchCollectionViewAdapter: NSObject {
 	public func insertItems(at: [IndexPath]) {
 		DispatchQueue.main.async { [weak self] in
 			if at.first?.row ?? 0 > 0 {
-				self?.collectionView?.performBatchUpdates({
+				self?.collectionView?.performBatchUpdates({ [weak self] in
 					self?.collectionView?.insertItems(at: at)
 				}, completion: { _ in })
 			} else {

@@ -30,7 +30,7 @@ final class PreviewViewController: UIViewController {
 
 	private lazy var trackPlayerView: TrackPlayerView = {
 		let trackPlayer = TrackPlayerView(frame: .zero)
-		trackPlayer.playerButton.addTarget(self, action: #selector(didTapPlayerButton), for: [.touchUpInside])
+		trackPlayer.setupButton(self, action: #selector(didTapPlayerButton))
 		trackPlayer.translatesAutoresizingMaskIntoConstraints = false
 		return trackPlayer
 	}()

@@ -26,6 +26,8 @@
 		A816043A26973E7700551C97 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A816043926973E7700551C97 /* ImageService.swift */; };
 		A816043C26973F2900551C97 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A816043B26973F2900551C97 /* ImageCache.swift */; };
 		A816043F26976FB000551C97 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A816043E26976FB000551C97 /* Logger.swift */; };
+		A83915A226BFF166005578D2 /* UIView+Rotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83915A126BFF166005578D2 /* UIView+Rotate.swift */; };
+		A83915A426BFF3FF005578D2 /* UIButton+PlayerIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83915A326BFF3FF005578D2 /* UIButton+PlayerIcon.swift */; };
 		A86374BB26BC937800FFAAF0 /* SearchCollectionViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86374BA26BC937800FFAAF0 /* SearchCollectionViewAdapter.swift */; };
 		A86875982695B356008C7D1D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86875972695B356008C7D1D /* SearchViewController.swift */; };
 		A887FCF326A3872500CC3D52 /* TrackDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A887FCF226A3872500CC3D52 /* TrackDownloader.swift */; };
@@ -57,6 +59,8 @@
 		A816043926973E7700551C97 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		A816043B26973F2900551C97 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		A816043E26976FB000551C97 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		A83915A126BFF166005578D2 /* UIView+Rotate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Rotate.swift"; sourceTree = "<group>"; };
+		A83915A326BFF3FF005578D2 /* UIButton+PlayerIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+PlayerIcon.swift"; sourceTree = "<group>"; };
 		A86374BA26BC937800FFAAF0 /* SearchCollectionViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionViewAdapter.swift; sourceTree = "<group>"; };
 		A86875972695B356008C7D1D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		A887FCF226A3872500CC3D52 /* TrackDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackDownloader.swift; sourceTree = "<group>"; };
@@ -123,6 +127,8 @@
 				A809A333269CAECD00519D6B /* TrackPreviewAudio.swift */,
 				A809A32D269CAE6100519D6B /* TrackPlayerView.swift */,
 				A809A32B269CA82B00519D6B /* PreviewTitleLabel.swift */,
+				A83915A126BFF166005578D2 /* UIView+Rotate.swift */,
+				A83915A326BFF3FF005578D2 /* UIButton+PlayerIcon.swift */,
 			);
 			path = Preview;
 			sourceTree = "<group>";
@@ -299,9 +305,11 @@
 				A816043A26973E7700551C97 /* ImageService.swift in Sources */,
 				A8131B2D2699ABE000AB0A53 /* SearchCellLayout.swift in Sources */,
 				A86875982695B356008C7D1D /* SearchViewController.swift in Sources */,
+				A83915A226BFF166005578D2 /* UIView+Rotate.swift in Sources */,
 				A809A32F269CAE6100519D6B /* TrackPlayerView.swift in Sources */,
 				A887FCF326A3872500CC3D52 /* TrackDownloader.swift in Sources */,
 				A812CD93269615D4001D8736 /* SearchCellModel.swift in Sources */,
+				A83915A426BFF3FF005578D2 /* UIButton+PlayerIcon.swift in Sources */,
 				F46E6AE2267A466D00C30769 /* SceneDelegate.swift in Sources */,
 				A81603D926972E7600551C97 /* iTunesList.swift in Sources */,
 				A8131B2F2699AD1000AB0A53 /* PreviewViewController.swift in Sources */,

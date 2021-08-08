@@ -1,9 +1,8 @@
 //
-//  TrackPlayerView.swift
-//  iTunesSearchSwift
+//  PreviewViewModel.swift
+//  iTunesSearch
 //
-//  Created by Alexandr on 20/06/2019.
-//  Copyright © 2019 iMac. All rights reserved.
+//  Created by Alexandr Serebryakov on 08.08.2021.
 //
 
 import UIKit
@@ -34,7 +33,7 @@ class TrackPlayerView: UIView {
 		return progress
 	}()
 
-	public lazy var playerButton: UIButton = {
+	private lazy var playerButton: UIButton = {
 		let button = UIButton(frame: .zero)
 		button.setImage(.download)
 		return button
@@ -48,6 +47,10 @@ class TrackPlayerView: UIView {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		commonInit()
+	}
+
+	public func setupButton(_ target: Any?, action: Selector) {
+		playerButton.addTarget(target, action: action, for: [.touchUpInside])
 	}
 
 	private func commonInit() {
@@ -82,20 +85,22 @@ extension TrackPlayerView: PreviewAudioDelegate {
 	func playerBeginDownloadSong() {
 		DispatchQueue.main.async { [weak self] in
 			self?.trackInfoLabel.text = "Загрузка фрагмента"
+			self?.playerButton.rotate(duration: 1)
 		}
 	}
 
 	func playerBeginPlay() {
 		DispatchQueue.main.async { [weak self] in
 			self?.playerButton.setImage(.pause)
-			self?.pulsate()
+			self?.playerButton.pulsate()
 		}
 	}
 
 	func playerStopPlay() {
 		DispatchQueue.main.async { [weak self] in
 			self?.playerButton.setImage(.play)
-			self?.pulsate()
+			self?.playerButton.stopRotating()
+			self?.playerButton.pulsate()
 		}
 	}
 
@@ -104,33 +109,5 @@ extension TrackPlayerView: PreviewAudioDelegate {
 			self?.trackInfoLabel.text = string
 			self?.progressView.progress = float
 		}
-	}
-}
-
-// MARK: - Анимации кнопок
-
-extension TrackPlayerView {
-	@objc
-	func pulsate() {
-		let pulse = CASpringAnimation(keyPath: "transform.scale")
-		pulse.duration = 0.4
-		pulse.fromValue = 0.7
-		pulse.toValue = 1.0
-		pulse.repeatCount = 0
-		playerButton.layer.add(pulse, forKey: "pulse")
-	}
-}
-
-// MARK: - Обработка иконок кнопки
-
-enum PlayerIcon: String {
-	case download
-	case pause
-	case play
-}
-
-extension UIButton {
-	fileprivate func setImage(_ icon: PlayerIcon) {
-		setImage(UIImage(named: icon.rawValue), for: .normal)
 	}
 }

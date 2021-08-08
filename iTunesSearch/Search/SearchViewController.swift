@@ -30,7 +30,7 @@ final class SearchViewController: UIViewController {
 		return collectionView
 	}()
 
-	private lazy var searchCounter = SearchCounterLabel(frame: .zero)
+	private lazy var searchCounter = SearchCounterLabel(viewModel: viewModel)
 
 	private lazy var search: UISearchController = {
 		let search = UISearchController(searchResultsController: nil)
@@ -54,17 +54,19 @@ final class SearchViewController: UIViewController {
 
 		viewModel.start()
 
-		viewModel.showMessage = { [weak self] message in
-			self?.adapter.reload()
-			SearchToast.show(message: message, controller: self!)
-			guard let count = self?.viewModel.count else { return }
-			self?.searchCounter.update(value: count)
+		viewModel.searchBegin = { [weak self] in
+			self?.searchCounter.searching()
 		}
 
-		viewModel.animatedReload = { [weak self] array in
+		viewModel.searchComplete = { [weak self] array in
 			self?.adapter.insertItems(at: array)
-			guard let count = self?.viewModel.count else { return }
-			self?.searchCounter.update(value: count)
+			self?.searchCounter.update()
+		}
+
+		viewModel.showMessage = { [weak self] message in
+			SearchToast.show(message: message, controller: self!)
+			self?.adapter.reload()
+			self?.searchCounter.update()
 		}
 	}
 }
@@ -74,7 +76,6 @@ final class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate, UISearchResultsUpdating {
 	func updateSearchResults(for searchController: UISearchController) {
 		guard let text = searchController.searchBar.text else { return }
-		searchCounter.searching()
 		viewModel.search(text)
 	}
 }
