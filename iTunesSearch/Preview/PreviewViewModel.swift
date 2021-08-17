@@ -83,11 +83,11 @@ class PreviewViewModelImpl: PreviewViewModel {
 		}
 
 		if let description = item.description {
-			items.append(PreviewStackItem(text: description, fontSize: 14.0, color: .black))
+			items.append(PreviewStackItem(text: description, fontSize: 16.0, color: .black))
 		}
 
 		if let longDescription = item.longDescription {
-			items.append(PreviewStackItem(text: longDescription, fontSize: 14.0, color: .black))
+			items.append(PreviewStackItem(text: longDescription, fontSize: 14.0, color: .darkGray))
 		}
 
 		updateStack(items)

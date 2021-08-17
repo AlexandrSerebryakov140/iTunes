@@ -12,7 +12,6 @@ protocol SearchService {
 }
 
 final class SearchServiceImpl: SearchService {
-	private var lastSearch: String = ""
 	private let session: URLSession
 
 	init(session: URLSession) {
@@ -24,8 +23,6 @@ final class SearchServiceImpl: SearchService {
 		offset: Int,
 		completion: @escaping (Result<iTunesList, SearchError>) -> Void
 	) {
-		lastSearch = search
-
 		guard let request = searchRequest(search: search, offset: offset) else {
 			completion(.failure(.request))
 			return

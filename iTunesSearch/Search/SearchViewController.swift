@@ -10,9 +10,9 @@ import UIKit
 
 final class SearchViewController: UIViewController {
 	let viewModel: SearchViewModel
-	let adapter: SearchCollectionViewAdapter
+	let adapter: SearchCollectionAdapter
 
-	init(viewModel: SearchViewModel, adapter: SearchCollectionViewAdapter) {
+	init(viewModel: SearchViewModel, adapter: SearchCollectionAdapter) {
 		self.viewModel = viewModel
 		self.adapter = adapter
 		super.init(nibName: nil, bundle: nil)
@@ -59,14 +59,14 @@ final class SearchViewController: UIViewController {
 		}
 
 		viewModel.searchComplete = { [weak self] array in
-			self?.adapter.insertItems(at: array)
-			self?.searchCounter.update()
+			self?.adapter.insertItems(itemsList: array)
+			self?.searchCounter.update(count: self?.adapter.count ?? 0)
 		}
 
 		viewModel.showMessage = { [weak self] message in
 			SearchToast.show(message: message, controller: self!)
 			self?.adapter.reload()
-			self?.searchCounter.update()
+			self?.searchCounter.update(count: self?.adapter.count ?? 0)
 		}
 	}
 }

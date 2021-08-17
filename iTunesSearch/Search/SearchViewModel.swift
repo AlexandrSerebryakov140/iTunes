@@ -10,21 +10,18 @@ import UIKit
 
 protocol SearchViewModel: AnyObject {
 	var searchBegin: () -> Void { get set }
-	var searchComplete: ([IndexPath]) -> Void { get set }
+	var searchComplete: ([SearchCellModel]?) -> Void { get set }
 	var showMessage: (String) -> Void { get set }
 
 	func start()
 	func search(_ text: String)
-	func checkLast(_ index: Int)
-	func model(_ index: Int) -> SearchCellModel
+	func checkIsLastItem(_ index: Int)
 	func toPreview(_ index: Int)
-
-	var count: Int { get }
 }
 
 class SearchViewModelImpl: SearchViewModel {
 	public var searchBegin: () -> Void = {}
-	public var searchComplete: ([IndexPath]) -> Void = { _ in }
+	public var searchComplete: ([SearchCellModel]?) -> Void = { _ in }
 	public var showMessage: (String) -> Void = { _ in }
 
 	private let searchService: SearchService
@@ -42,62 +39,16 @@ class SearchViewModelImpl: SearchViewModel {
 		search("")
 	}
 
-	public var count: Int {
-		items.count
-	}
-
-	public func model(_ index: Int) -> SearchCellModel {
-		let item = items[index]
-		return SearchCellModel(item)
-	}
-
-	private func updateItemsList(list: iTunesList) -> [IndexPath] {
-		let first = items.count
-		let second = items.count + list.results.count - 1
-
-		var array: [IndexPath] = []
-
-		for index in first ... second {
-			let indexPath = IndexPath(row: index, section: 0)
-			array.append(indexPath)
-		}
-
-		return array
-	}
-
-	private func addItems(list: iTunesList) {
-		let updateItems = updateItemsList(list: list)
-
-		list.results.forEach { [weak self] item in
-			self?.items.append(item)
-		}
-
-		searchComplete(updateItems)
-	}
-
-	private func createList(list: iTunesList, request: String) {
-		Logger.log(state: .info, message: "По запросу '\(request)' получено \(list.results.count) треков")
-
-		items = []
-		lastSearch = request
-		addItems(list: list)
-	}
-
-	private func updateList(list: iTunesList) {
-		Logger.log(state: .info, message: "Добавлено ещё \(list.results.count) треков")
-		addItems(list: list)
-	}
-
 	public func search(_ text: String) {
 		if lastSearch == text { return }
 
 		if text.isEmpty {
-			items = []
+			clearList()
 			showMessage("Введите ключевые слова в строке поиска")
 			return
 		}
 		if text.count < 5 {
-			items = []
+			clearList()
 			showMessage("В запросе должно быть не менее 5 символов")
 			return
 		}
@@ -109,13 +60,13 @@ class SearchViewModelImpl: SearchViewModel {
 			case let .success(list):
 				self?.createList(list: list, request: text)
 			case let .failure(error):
-				self?.items = []
+				self?.clearList()
 				self?.showMessage(error.text())
 			}
 		})
 	}
 
-	public func checkLast(_ index: Int) {
+	public func checkIsLastItem(_ index: Int) {
 		guard index >= items.count - 1 else { return }
 		guard !isUpdate else { return }
 
@@ -136,4 +87,34 @@ class SearchViewModelImpl: SearchViewModel {
 		let item = items[index]
 		router.toPreview(item: item)
 	}
+    
+    // MARK: - Работа со списком
+    
+    private func addItems(list: iTunesList) {
+        list.results.forEach { [weak self] item in
+            self?.items.append(item)
+        }
+
+        searchComplete(list.results.map { SearchCellModel($0) })
+    }
+
+    private func createList(list: iTunesList, request: String) {
+        Logger.log(state: .info, message: "По запросу '\(request)' получено \(list.results.count) треков")
+
+        clearList()
+        lastSearch = request
+        addItems(list: list)
+    }
+
+    private func updateList(list: iTunesList) {
+        Logger.log(state: .info, message: "Добавлено ещё \(list.results.count) треков")
+        addItems(list: list)
+    }
+
+    private func clearList() {
+        items = []
+        lastSearch = ""
+        searchComplete(nil)
+    }
+
 }

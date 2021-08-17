@@ -8,10 +8,11 @@
 import Foundation
 import UIKit
 
-final class SearchCollectionViewAdapter: NSObject {
+final class SearchCollectionAdapter: NSObject {
 	private weak var collectionView: UICollectionView?
 	private weak var viewModel: SearchViewModel?
 	private let imageService: ImageService
+	private var items: [SearchCellModel] = []
 
 	init(viewModel: SearchViewModel, imageService: ImageService) {
 		self.viewModel = viewModel
@@ -47,11 +48,40 @@ final class SearchCollectionViewAdapter: NSObject {
 		}
 	}
 
-	public func insertItems(at: [IndexPath]) {
+	public var count: Int {
+		items.count
+	}
+
+	private func updateItemsList(list: [Any]) -> [IndexPath] {
+		let first = items.count
+		let second = items.count + list.count - 1
+
+		var array: [IndexPath] = []
+
+		for index in first ... second {
+			let indexPath = IndexPath(row: index, section: 0)
+			array.append(indexPath)
+		}
+
+		return array
+	}
+
+	public func insertItems(itemsList: [SearchCellModel]?) {
+		guard let list = itemsList else {
+			items = []
+			return
+		}
+
+		let updateItems = updateItemsList(list: list)
+
+		list.forEach({ model in
+			items.append(model)
+		})
+
 		DispatchQueue.main.async { [weak self] in
-			if at.first?.row ?? 0 > 0 {
+			if updateItems.first?.row ?? 0 > 0 {
 				self?.collectionView?.performBatchUpdates({ [weak self] in
-					self?.collectionView?.insertItems(at: at)
+					self?.collectionView?.insertItems(at: updateItems)
 				}, completion: { _ in })
 			} else {
 				self?.collectionView?.reloadData()
@@ -63,20 +93,20 @@ final class SearchCollectionViewAdapter: NSObject {
 	private var noArtworkImage = UIImage(.noArtwork)
 }
 
-extension SearchCollectionViewAdapter: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension SearchCollectionAdapter: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, layout _: UICollectionViewLayout, sizeForItemAt _: IndexPath) -> CGSize {
 		CGSize(width: collectionView.frame.size.width, height: SearchCell.height())
 	}
 
 	func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
-		viewModel?.count ?? 0
+		items.count
 	}
 
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! SearchCell
-		guard let model = viewModel else { return cell }
-		let cellModel = model.model(indexPath.row)
-		cell.configureCell(cellModel, noArtworkImage: noArtworkImage.copy() as! UIImage)
+		let cellModel = items[indexPath.row]
+		let noImage: UIImage = noArtworkImage.copy() as! UIImage
+		cell.configureCell(cellModel, noArtworkImage: noImage)
 		loadImage(artworkUrl: cellModel.artworkUrl) { [weak cell] image, path in
 			cell?.setupImage(image: image, path: path)
 		}
@@ -89,7 +119,7 @@ extension SearchCollectionViewAdapter: UICollectionViewDelegate, UICollectionVie
 	}
 
 	func collectionView(_: UICollectionView, willDisplay _: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-		viewModel?.checkLast(indexPath.row)
+		viewModel?.checkIsLastItem(indexPath.row)
 	}
 
 	public func loadImage(artworkUrl: String?, completion: @escaping (UIImage, String) -> Void) {

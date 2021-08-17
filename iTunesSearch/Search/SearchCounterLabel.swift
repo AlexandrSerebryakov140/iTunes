@@ -34,8 +34,7 @@ final class SearchCounterLabel: UILabel {
 		frame = CGRect(x: x, y: y, width: width, height: height)
 	}
 
-	public func update() {
-		guard let count = viewModel?.count else { return }
+	public func update(count: Int) {
 		DispatchQueue.main.async { [weak self] in
 			self?.text = String(count)
 			self?.textColor = count == 0 ? .clear : .darkGray
