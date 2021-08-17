@@ -9,8 +9,9 @@ import Foundation
 import UIKit
 
 final class PreviewViewController: UIViewController {
-	let viewModel: PreviewViewModel
-	var layout: PreviewViewControllerLayout
+	private let viewModel: PreviewViewModel
+	private var titleModel: TitleLabelModel?
+	private var layout: PreviewViewControllerLayout
 
 	private lazy var imageView: UIImageView = {
 		let imageView = UIImageView(frame: .zero)
@@ -49,20 +50,26 @@ final class PreviewViewController: UIViewController {
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		super.traitCollectionDidChange(previousTraitCollection)
 		layout.layoutTrait(collection: view.traitCollection)
-		updateNavigationBar(item: viewModel.item, collection: view.traitCollection)
+		updateNavigationBar(collection: view.traitCollection)
 	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setupView()
 
-		viewModel.start({ [weak self] image in
-			self?.imageView.image = image
-		}) { [weak self] items in
+		viewModel.updateImage = { [weak self] image in
+			self?.updateImageView(image: image)
+		}
+
+		viewModel.updateStack = { [weak self] items in
 			self?.updateStackView(items: items)
 		}
 
-		viewModel.update(trackPlayerView)
+		viewModel.updateTitleModel = { [weak self] model in
+			self?.updateTitleModel(model: model)
+		}
+
+		viewModel.start(audioDelegate: trackPlayerView)
 	}
 
 	private func setupView() {
@@ -73,11 +80,10 @@ final class PreviewViewController: UIViewController {
 
 		layout.setupConstraints(view: view, image: imageView, stack: stackView, player: trackPlayerView)
 		layout.layoutTrait(collection: view.traitCollection)
-		updateNavigationBar(item: viewModel.item, collection: view.traitCollection)
 	}
 
-	private func updateNavigationBar(item: iTunesItem, collection: UITraitCollection) {
-		navigationItem.titleView = PreviewTitleLabel(item: item, collection: collection)
+	private func updateNavigationBar(collection: UITraitCollection) {
+		navigationItem.titleView = PreviewTitleLabel(titleModel: titleModel, collection: collection)
 	}
 
 	@objc
@@ -89,10 +95,28 @@ final class PreviewViewController: UIViewController {
 // MARK: - Вывод данных из iTunesItem в стек PreviewViewController
 
 extension PreviewViewController {
+	private func updateImageView(image: UIImage) {
+		DispatchQueue.main.async { [weak self] in
+			self?.imageView.image = image
+		}
+	}
+
 	private func updateStackView(items: [PreviewStackItem]) {
-		items.forEach { item in
-			let label = addStackViewLabel(item)
-			stackView.addArrangedSubview(label)
+		DispatchQueue.main.async { [weak self] in
+			items.forEach { item in
+				if let label = self?.addStackViewLabel(item) {
+					self?.stackView.addArrangedSubview(label)
+				}
+			}
+		}
+	}
+
+	private func updateTitleModel(model: TitleLabelModel) {
+		DispatchQueue.main.async { [weak self] in
+			self?.titleModel = model
+			if let collection = self?.view.traitCollection {
+				self?.updateNavigationBar(collection: collection)
+			}
 		}
 	}
 

@@ -8,7 +8,7 @@
 import AudioToolbox
 import AVFoundation
 
-class TrackPreviewAudio: NSObject {
+final class TrackPreviewAudio: NSObject {
 	private var audioPlayer: AVAudioPlayer?
 	public var updateState: (TrackPlayerState) -> Void = { _ in }
 	public var updateTime: (String, Float) -> Void = { _, _ in }

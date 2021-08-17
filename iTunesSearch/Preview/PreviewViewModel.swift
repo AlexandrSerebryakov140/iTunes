@@ -22,20 +22,23 @@ enum TrackPlayerState: String {
 	case error // ошибка
 }
 
-protocol PreviewViewModel {
-	func start(_ updateImage: @escaping (UIImage) -> Void, updateStack: @escaping ([PreviewStackItem]) -> Void)
-	func update(_ audioDelegate: PreviewAudioDelegate)
+protocol PreviewViewModel: AnyObject {
+	func start(audioDelegate: PreviewAudioDelegate)
 	func didTapButton()
-	var item: iTunesItem { get }
+	var updateImage: (UIImage) -> Void { get set }
+	var updateStack: ([PreviewStackItem]) -> Void { get set }
+	var updateTitleModel: (TitleLabelModel) -> Void { get set }
 }
 
 class PreviewViewModelImpl: PreviewViewModel {
+	public var updateImage: (UIImage) -> Void = { _ in }
+	public var updateStack: ([PreviewStackItem]) -> Void = { _ in }
+	public var updateTitleModel: (TitleLabelModel) -> Void = { _ in }
+
+	private let item: iTunesItem
 	private let imageService: ImageService
 	private let router: Router
-	public var item: iTunesItem
 	private var previewAudio: TrackPreviewAudio?
-	private var updateImage: (UIImage) -> Void = { _ in }
-	private var updateStack: ([PreviewStackItem]) -> Void = { _ in }
 	private let downloader: TrackDownloader
 	private weak var delegate: PreviewAudioDelegate?
 	private var state: TrackPlayerState = .none
@@ -48,13 +51,16 @@ class PreviewViewModelImpl: PreviewViewModel {
 		print(item)
 	}
 
-	func start(
-		_ updateImage: @escaping (UIImage) -> Void,
-		updateStack: @escaping ([PreviewStackItem]) -> Void
-	) {
-		self.updateImage = updateImage
-		self.updateStack = updateStack
+	public func start(audioDelegate: PreviewAudioDelegate) {
+		updateTitle()
 		updateStackView()
+		downloadImage()
+		createPreviewAudio(audioDelegate)
+	}
+
+	private func updateTitle() {
+		let model = TitleLabelModel(name: item.trackName, album: item.collectionName)
+		updateTitleModel(model)
 	}
 
 	private func updateStackView() {
@@ -64,8 +70,7 @@ class PreviewViewModelImpl: PreviewViewModel {
 			items.append(PreviewStackItem(text: track, fontSize: 24.0, color: .black))
 		}
 
-		if item.trackTimeMillis != nil {
-			let time = SearchCellModel.trackLenght(item.trackTimeMillis)
+		if let time = SearchCellModel.trackLenght(item.trackTimeMillis) {
 			items.append(PreviewStackItem(text: time, fontSize: 18.0, color: .darkGray))
 		}
 
@@ -88,13 +93,7 @@ class PreviewViewModelImpl: PreviewViewModel {
 		updateStack(items)
 	}
 
-	private func updateView(image: UIImage) {
-		DispatchQueue.main.async { [weak self] in
-			self?.updateImage(image)
-		}
-	}
-
-	public func update(_ audioDelegate: PreviewAudioDelegate) {
+	private func createPreviewAudio(_ audioDelegate: PreviewAudioDelegate) {
 		previewAudio = TrackPreviewAudio()
 		previewAudio?.updateState = { [weak self] state in
 			self?.state = state
@@ -105,17 +104,19 @@ class PreviewViewModelImpl: PreviewViewModel {
 			self?.delegate?.playerUpdateData(string: string, float: float)
 		}
 
+		delegate = audioDelegate
+	}
+
+	private func downloadImage() {
 		// Загрузка из кэша маленькой картинки
 		guard let url100 = item.artworkUrl100 else { return }
 		imageService.download(path: url100) { [weak self] image, _ in
-			self?.updateView(image: image)
+			self?.updateImage(image)
 		}
 		// Загрузка большой картинки
 		imageService.download(path: item.artworkUrl600) { [weak self] image, _ in
-			self?.updateView(image: image)
+			self?.updateImage(image)
 		}
-
-		delegate = audioDelegate
 	}
 
 	private func stateIsUpdate(state: TrackPlayerState) {
@@ -177,7 +178,7 @@ class PreviewViewModelImpl: PreviewViewModel {
 
 	private func trackDownloadProgress(written: Int64, expected: Int64) {
 		let float = Float(written) / Float(expected)
-		let str = "Всего: \(String(written / 1_000)) Кб / \(String(expected / 1_000)) Кб"
+		let str = "Всего: \(String(written / 1_024)) Кб / \(String(expected / 1_024)) Кб"
 		delegate?.playerUpdateData(string: str, float: float)
 	}
 }

@@ -15,7 +15,7 @@ protocol PreviewAudioDelegate: AnyObject {
 	func error()
 }
 
-class TrackPlayerView: UIView {
+final class TrackPlayerView: UIView {
 	private lazy var trackInfoLabel: UILabel = {
 		let label = UILabel(frame: .zero)
 		label.text = "Загрузить фрагмент"

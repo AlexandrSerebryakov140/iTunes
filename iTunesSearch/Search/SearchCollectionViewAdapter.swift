@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SearchCollectionViewAdapter: NSObject {
+final class SearchCollectionViewAdapter: NSObject {
 	private weak var collectionView: UICollectionView?
 	private weak var viewModel: SearchViewModel?
 	private let imageService: ImageService
@@ -60,7 +60,7 @@ class SearchCollectionViewAdapter: NSObject {
 	}
 
 	private let reuseIdentifier = "Cell"
-	private var noArtworkImage = UIImage(named: "noArtwork")!
+	private var noArtworkImage = UIImage(.noArtwork)
 }
 
 extension SearchCollectionViewAdapter: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -76,7 +76,7 @@ extension SearchCollectionViewAdapter: UICollectionViewDelegate, UICollectionVie
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! SearchCell
 		guard let model = viewModel else { return cell }
 		let cellModel = model.model(indexPath.row)
-		cell.configureCell(cellModel, noArtworkImage: noArtworkImage)
+		cell.configureCell(cellModel, noArtworkImage: noArtworkImage.copy() as! UIImage)
 		loadImage(artworkUrl: cellModel.artworkUrl) { [weak cell] image, path in
 			cell?.setupImage(image: image, path: path)
 		}

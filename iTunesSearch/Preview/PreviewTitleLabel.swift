@@ -32,7 +32,11 @@ struct TitleLabelModel {
 		}
 	}
 
-	private static func aString(name: String?, font: UIFont, color: UIColor = .black) -> NSAttributedString {
+	private static func aString(
+		name: String?,
+		font: UIFont,
+		color: UIColor
+	) -> NSAttributedString {
 		let string = name ?? ""
 		let attr = [
 			NSAttributedString.Key.foregroundColor: color,
@@ -41,7 +45,12 @@ struct TitleLabelModel {
 		return NSAttributedString(string: string, attributes: attr)
 	}
 
-	private static func twoWord(name: String?, album: String?, separate: String, fontSize: CGFloat) -> NSAttributedString {
+	private static func twoWord(
+		name: String?,
+		album: String?,
+		separate: String,
+		fontSize: CGFloat
+	) -> NSAttributedString {
 		let firstFont = UIFont.systemFont(ofSize: fontSize, weight: .semibold)
 		let secondFont = UIFont.systemFont(ofSize: fontSize)
 		let firstString = aString(name: name, font: firstFont, color: nameColor)
@@ -60,13 +69,13 @@ struct TitleLabelModel {
 	}
 }
 
-class PreviewTitleLabel: UILabel {
-	init(item: iTunesItem, collection: UITraitCollection) {
+final class PreviewTitleLabel: UILabel {
+	init(titleModel: TitleLabelModel?, collection: UITraitCollection) {
 		super.init(frame: .zero)
 		backgroundColor = .clear
 		textAlignment = .center
 
-		let model = TitleLabelModel(name: item.trackName, album: item.collectionName)
+		guard let model = titleModel else { return }
 		if isHorizontal(collection.horizontalSizeClass) {
 			attributedText = model.horizontalAttributedText
 			numberOfLines = model.horizontalNumberOfLines

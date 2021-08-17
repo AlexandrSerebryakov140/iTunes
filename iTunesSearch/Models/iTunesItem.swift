@@ -37,7 +37,7 @@ struct iTunesItem: Codable, Equatable, Hashable {
 		case genreName = "primaryGenreName"
 		case country
 		case releaseDate
-		case description
+		case description = "shortDescription"
 		case longDescription
 		case artistName
 		case collectionName = "collectionCensoredName"

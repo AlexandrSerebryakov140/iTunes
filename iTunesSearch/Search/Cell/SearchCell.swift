@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 
 final class SearchCell: UICollectionViewCell {
-	let artwork: UIImageView = {
+	private var artworkUrl: String?
+
+	private let artwork: UIImageView = {
 		let imageView = UIImageView(frame: .zero)
 		imageView.clipsToBounds = true
 		imageView.layer.borderColor = UIColor.lightGray.cgColor
@@ -18,7 +20,7 @@ final class SearchCell: UICollectionViewCell {
 		return imageView
 	}()
 
-	let name: UILabel = {
+	private let name: UILabel = {
 		let label = UILabel(frame: .zero)
 		label.font = UIFont.systemFont(ofSize: 19.0, weight: .regular)
 		label.textColor = .black
@@ -26,7 +28,7 @@ final class SearchCell: UICollectionViewCell {
 		return label
 	}()
 
-	let author: UILabel = {
+	private let author: UILabel = {
 		let label = UILabel(frame: .zero)
 		label.font = UIFont.systemFont(ofSize: 15.0, weight: .regular)
 		label.textColor = .lightGray
@@ -34,7 +36,7 @@ final class SearchCell: UICollectionViewCell {
 		return label
 	}()
 
-	let time: UILabel = {
+	private let time: UILabel = {
 		let label = UILabel(frame: .zero)
 		label.font = UIFont.systemFont(ofSize: 15.0, weight: .regular)
 		label.textColor = .lightGray
@@ -63,8 +65,6 @@ final class SearchCell: UICollectionViewCell {
 		artwork.image = noArtworkImage
 		layoutIfNeeded()
 	}
-
-	private var artworkUrl: String?
 
 	public func setupImage(image: UIImage, path: String) {
 		DispatchQueue.main.async { [weak self] in

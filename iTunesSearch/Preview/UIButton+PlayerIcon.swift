@@ -13,10 +13,17 @@ enum PlayerIcon: String {
 	case download
 	case pause
 	case play
+	case noArtwork
+}
+
+extension UIImage {
+	convenience init(_ icon: PlayerIcon) {
+		self.init(named: icon.rawValue)!
+	}
 }
 
 extension UIButton {
 	func setImage(_ icon: PlayerIcon) {
-		setImage(UIImage(named: icon.rawValue), for: .normal)
+		setImage(UIImage(icon), for: .normal)
 	}
 }
