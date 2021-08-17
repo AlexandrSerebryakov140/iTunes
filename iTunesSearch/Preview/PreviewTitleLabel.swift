@@ -8,23 +8,71 @@
 import Foundation
 import UIKit
 
-class PreviewTitleLabel: UILabel {
-	private let name: String?
-	private let album: String?
+struct TitleLabelModel {
+	public var horizontalAttributedText: NSAttributedString
+	public let horizontalNumberOfLines: Int
+	public let verticalAttributedText: NSAttributedString
+	public let verticalNumberOfLines: Int
 
+	private static let nameColor: UIColor = .darkGray
+	private static let stringColor: UIColor = .lightGray
+	private static let oneWordFont = UIFont.systemFont(ofSize: 19, weight: .semibold)
+
+	init(name: String?, album: String?) {
+		horizontalNumberOfLines = 1
+
+		if album != nil {
+			horizontalAttributedText = TitleLabelModel.twoWord(name: name, album: album, separate: " - ", fontSize: 13)
+			verticalAttributedText = TitleLabelModel.twoWord(name: name, album: album, separate: "\n", fontSize: 16)
+			verticalNumberOfLines = 2
+		} else {
+			horizontalAttributedText = TitleLabelModel.oneWord(name: name)
+			verticalAttributedText = TitleLabelModel.oneWord(name: name)
+			verticalNumberOfLines = 1
+		}
+	}
+
+	private static func aString(name: String?, font: UIFont, color: UIColor = .black) -> NSAttributedString {
+		let string = name ?? ""
+		let attr = [
+			NSAttributedString.Key.foregroundColor: color,
+			NSAttributedString.Key.font: font,
+		]
+		return NSAttributedString(string: string, attributes: attr)
+	}
+
+	private static func twoWord(name: String?, album: String?, separate: String, fontSize: CGFloat) -> NSAttributedString {
+		let firstFont = UIFont.systemFont(ofSize: fontSize, weight: .semibold)
+		let secondFont = UIFont.systemFont(ofSize: fontSize)
+		let firstString = aString(name: name, font: firstFont, color: nameColor)
+		let separateString = aString(name: separate, font: firstFont, color: nameColor)
+		let secondString = aString(name: album, font: secondFont, color: stringColor)
+
+		let attrString = NSMutableAttributedString(attributedString: firstString)
+		attrString.append(separateString)
+		attrString.append(secondString)
+
+		return attrString
+	}
+
+	private static func oneWord(name: String?) -> NSAttributedString {
+		aString(name: name, font: oneWordFont, color: nameColor)
+	}
+}
+
+class PreviewTitleLabel: UILabel {
 	init(item: iTunesItem, collection: UITraitCollection) {
-		name = item.trackName
-		album = item.collectionName
-		let horizontal = collection.horizontalSizeClass
 		super.init(frame: .zero)
 		backgroundColor = .clear
 		textAlignment = .center
-		if album != nil {
-			attributedText = nameByOrientation(horizontal)
-			numberOfLines = linesByOrientation(horizontal)
+
+		let model = TitleLabelModel(name: item.trackName, album: item.collectionName)
+		if isHorizontal(collection.horizontalSizeClass) {
+			attributedText = model.horizontalAttributedText
+			numberOfLines = model.horizontalNumberOfLines
 		} else {
-			attributedText = oneWord()
-			numberOfLines = 1
+			attributedText = model.verticalAttributedText
+			numberOfLines = model.verticalNumberOfLines
 		}
 	}
 
@@ -35,48 +83,5 @@ class PreviewTitleLabel: UILabel {
 
 	private func isHorizontal(_ horizontal: UIUserInterfaceSizeClass) -> Bool {
 		(horizontal == .regular) ? true : false
-	}
-
-	private func addString(name: String?, font: UIFont, color: UIColor = .black) -> NSAttributedString {
-		let string = name ?? ""
-		let attr = [
-			NSAttributedString.Key.foregroundColor: color,
-			NSAttributedString.Key.font: font,
-		]
-		return NSAttributedString(string: string, attributes: attr)
-	}
-
-	private func twoWord(separate: String, fontSize: CGFloat) -> NSAttributedString {
-		let nameColor: UIColor = .darkGray
-		let stringColor: UIColor = .lightGray
-		let firstFont = UIFont.systemFont(ofSize: fontSize, weight: .semibold)
-		let secondFont = UIFont.systemFont(ofSize: fontSize)
-		let firstString = addString(name: name, font: firstFont, color: nameColor)
-		let separateString = addString(name: separate, font: firstFont, color: nameColor)
-		let secondString = addString(name: album, font: secondFont, color: stringColor)
-
-		let attrString = NSMutableAttributedString(attributedString: firstString)
-		attrString.append(separateString)
-		attrString.append(secondString)
-
-		return attrString
-	}
-
-	private func oneWord() -> NSAttributedString {
-		let nameColor: UIColor = .darkGray
-		let font = UIFont.systemFont(ofSize: 19, weight: .semibold)
-		return addString(name: name, font: font, color: nameColor)
-	}
-
-	private func nameByOrientation(_ horizontal: UIUserInterfaceSizeClass) -> NSAttributedString {
-		if isHorizontal(horizontal) {
-			return twoWord(separate: " - ", fontSize: 13)
-		} else {
-			return twoWord(separate: "\n", fontSize: 16)
-		}
-	}
-
-	private func linesByOrientation(_ horizontal: UIUserInterfaceSizeClass) -> Int {
-		isHorizontal(horizontal) ? 1 : 2
 	}
 }

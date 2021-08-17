@@ -122,8 +122,8 @@
 			isa = PBXGroup;
 			children = (
 				A8131B2E2699AD1000AB0A53 /* PreviewViewController.swift */,
-				A8C6512B269F418F007C2751 /* PreviewViewControllerLayout.swift */,
 				A8131B312699AD4300AB0A53 /* PreviewViewModel.swift */,
+				A8C6512B269F418F007C2751 /* PreviewViewControllerLayout.swift */,
 				A809A333269CAECD00519D6B /* TrackPreviewAudio.swift */,
 				A809A32D269CAE6100519D6B /* TrackPlayerView.swift */,
 				A809A32B269CA82B00519D6B /* PreviewTitleLabel.swift */,

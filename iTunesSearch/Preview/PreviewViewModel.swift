@@ -8,6 +8,12 @@
 import Foundation
 import UIKit
 
+struct PreviewStackItem {
+	let text: String
+	let fontSize: CGFloat
+	let color: UIColor
+}
+
 enum TrackPlayerState: String {
 	case none // исходное состояние
 	case trackIsDownloaded // фрагмент трека загружается
@@ -17,7 +23,7 @@ enum TrackPlayerState: String {
 }
 
 protocol PreviewViewModel {
-	func start(_ updateImage: @escaping (UIImage) -> Void)
+	func start(_ updateImage: @escaping (UIImage) -> Void, updateStack: @escaping ([PreviewStackItem]) -> Void)
 	func update(_ audioDelegate: PreviewAudioDelegate)
 	func didTapButton()
 	var item: iTunesItem { get }
@@ -29,6 +35,7 @@ class PreviewViewModelImpl: PreviewViewModel {
 	public var item: iTunesItem
 	private var previewAudio: TrackPreviewAudio?
 	private var updateImage: (UIImage) -> Void = { _ in }
+	private var updateStack: ([PreviewStackItem]) -> Void = { _ in }
 	private let downloader: TrackDownloader
 	private weak var delegate: PreviewAudioDelegate?
 	private var state: TrackPlayerState = .none
@@ -38,13 +45,47 @@ class PreviewViewModelImpl: PreviewViewModel {
 		self.imageService = imageService
 		self.downloader = downloader
 		self.item = item
-//		print(item)
+		print(item)
 	}
 
 	func start(
-		_ updateImage: @escaping (UIImage) -> Void
+		_ updateImage: @escaping (UIImage) -> Void,
+		updateStack: @escaping ([PreviewStackItem]) -> Void
 	) {
 		self.updateImage = updateImage
+		self.updateStack = updateStack
+		updateStackView()
+	}
+
+	private func updateStackView() {
+		var items: [PreviewStackItem] = []
+
+		if let track = item.trackName {
+			items.append(PreviewStackItem(text: track, fontSize: 24.0, color: .black))
+		}
+
+		if item.trackTimeMillis != nil {
+			let time = SearchCellModel.trackLenght(item.trackTimeMillis)
+			items.append(PreviewStackItem(text: time, fontSize: 18.0, color: .darkGray))
+		}
+
+		if let artist = item.artistName {
+			items.append(PreviewStackItem(text: artist, fontSize: 18.0, color: .darkGray))
+		}
+
+		if let album = item.collectionName {
+			items.append(PreviewStackItem(text: album, fontSize: 18.0, color: .black))
+		}
+
+		if let description = item.description {
+			items.append(PreviewStackItem(text: description, fontSize: 14.0, color: .black))
+		}
+
+		if let longDescription = item.longDescription {
+			items.append(PreviewStackItem(text: longDescription, fontSize: 14.0, color: .black))
+		}
+
+		updateStack(items)
 	}
 
 	private func updateView(image: UIImage) {

@@ -23,28 +23,28 @@ struct PreviewViewControllerLayout {
 
 			stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 			stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-			stack.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 10),
+			stack.topAnchor.constraint(equalTo: image.safeAreaLayoutGuide.bottomAnchor, constant: 10),
 
 			player.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 			player.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
 			player.heightAnchor.constraint(equalToConstant: 60),
-			player.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
+			player.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
 		])
 
 		regularConstraints.append(contentsOf: [ // .isLandscape
 			image.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-			image.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+			image.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
 			image.widthAnchor.constraint(equalToConstant: width * 0.8),
 			image.heightAnchor.constraint(equalToConstant: width * 0.8),
 
 			stack.topAnchor.constraint(equalTo: image.topAnchor),
 			stack.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 10),
-			stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+			stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
 
 			player.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 10),
-			player.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+			player.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
 			player.heightAnchor.constraint(equalToConstant: 60),
-			player.bottomAnchor.constraint(equalTo: image.bottomAnchor),
+			player.bottomAnchor.constraint(equalTo: image.safeAreaLayoutGuide.bottomAnchor),
 		])
 	}
 

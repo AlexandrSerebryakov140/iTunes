@@ -55,11 +55,12 @@ final class PreviewViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setupView()
-		addToStackView(stackView: stackView, item: viewModel.item)
 
 		viewModel.start({ [weak self] image in
 			self?.imageView.image = image
-		})
+		}) { [weak self] items in
+			self?.updateStackView(items: items)
+		}
 
 		viewModel.update(trackPlayerView)
 	}
@@ -88,30 +89,22 @@ final class PreviewViewController: UIViewController {
 // MARK: - Вывод данных из iTunesItem в стек PreviewViewController
 
 extension PreviewViewController {
-	private func addToStackView(stackView: UIStackView, item: iTunesItem) {
-		let item = viewModel.item
-
-		if let track = item.trackName {
-			stackView.addArrangedSubview(addLabel(track, fontSize: 28.0, color: .black))
-		}
-
-		if let artist = item.artistName {
-			stackView.addArrangedSubview(addLabel(artist, fontSize: 18.0, color: .darkGray))
-		}
-
-		if let album = item.collectionName {
-			stackView.addArrangedSubview(addLabel(album, fontSize: 18.0, color: .black))
+	private func updateStackView(items: [PreviewStackItem]) {
+		items.forEach { item in
+			let label = addStackViewLabel(item)
+			stackView.addArrangedSubview(label)
 		}
 	}
 
-	private func addLabel(_ text: String, fontSize: CGFloat, color: UIColor) -> UILabel {
+	private func addStackViewLabel(_ item: PreviewStackItem) -> UILabel {
 		let label = UILabel()
-		label.textColor = color
+		label.textColor = item.color
 		label.textAlignment = .center
-		label.font = .systemFont(ofSize: fontSize)
-		label.text = text
+		label.font = .systemFont(ofSize: item.fontSize)
+		label.text = item.text
 		label.lineBreakMode = .byWordWrapping
 		label.numberOfLines = 0
+		label.adjustsFontSizeToFitWidth = true
 		return label
 	}
 }
