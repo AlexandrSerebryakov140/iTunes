@@ -87,34 +87,33 @@ class SearchViewModelImpl: SearchViewModel {
 		let item = items[index]
 		router.toPreview(item: item)
 	}
-    
-    // MARK: - Работа со списком
-    
-    private func addItems(list: iTunesList) {
-        list.results.forEach { [weak self] item in
-            self?.items.append(item)
-        }
 
-        searchComplete(list.results.map { SearchCellModel($0) })
-    }
+	// MARK: - Работа со списком
 
-    private func createList(list: iTunesList, request: String) {
-        Logger.log(state: .info, message: "По запросу '\(request)' получено \(list.results.count) треков")
+	private func addItems(list: iTunesList) {
+		list.results.forEach { [weak self] item in
+			self?.items.append(item)
+		}
 
-        clearList()
-        lastSearch = request
-        addItems(list: list)
-    }
+		searchComplete(list.results.map { SearchCellModel($0) })
+	}
 
-    private func updateList(list: iTunesList) {
-        Logger.log(state: .info, message: "Добавлено ещё \(list.results.count) треков")
-        addItems(list: list)
-    }
+	private func createList(list: iTunesList, request: String) {
+		Logger.log(state: .info, message: "По запросу '\(request)' получено \(list.results.count) треков")
 
-    private func clearList() {
-        items = []
-        lastSearch = ""
-        searchComplete(nil)
-    }
+		clearList()
+		lastSearch = request
+		addItems(list: list)
+	}
 
+	private func updateList(list: iTunesList) {
+		Logger.log(state: .info, message: "Добавлено ещё \(list.results.count) треков")
+		addItems(list: list)
+	}
+
+	private func clearList() {
+		items = []
+		lastSearch = ""
+		searchComplete(nil)
+	}
 }

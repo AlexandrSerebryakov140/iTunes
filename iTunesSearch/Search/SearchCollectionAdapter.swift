@@ -24,32 +24,48 @@ final class SearchCollectionAdapter: NSObject {
 		self.collectionView?.register(SearchCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 		self.collectionView?.backgroundColor = .white
 		self.collectionView?.keyboardDismissMode = .onDrag
+		self.collectionView?.translatesAutoresizingMaskIntoConstraints = false
 
 		self.collectionView?.delegate = self
 		self.collectionView?.dataSource = self
 	}
 
-	public func subview(view: UIView) {
-		guard let collection = collectionView else { return }
-
-		collection.translatesAutoresizingMaskIntoConstraints = false
-		view.addSubview(collection)
-		NSLayoutConstraint.activate([
-			collection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-			collection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-			collection.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
-			collection.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-		])
+	public var count: Int {
+		items.count
 	}
 
-	public func reload() {
+	public func insertItems(_ itemsList: [SearchCellModel]?) {
+		guard let list = itemsList else {
+			items = []
+			reload()
+			return
+		}
+
+		let updateItems = updateItemsList(list: list)
+
+		list.forEach({ model in
+			items.append(model)
+		})
+
+		if updateItems.first?.row ?? 0 > 0 {
+			reloadWithInsertItems(updateItems: updateItems)
+		} else {
+			reload()
+		}
+	}
+
+	private func reload() {
 		DispatchQueue.main.async { [weak self] in
 			self?.collectionView?.reloadData()
 		}
 	}
 
-	public var count: Int {
-		items.count
+	private func reloadWithInsertItems(updateItems: [IndexPath]) {
+		DispatchQueue.main.async { [weak self] in
+			self?.collectionView?.performBatchUpdates({ [weak self] in
+				self?.collectionView?.insertItems(at: updateItems)
+			}, completion: { _ in })
+		}
 	}
 
 	private func updateItemsList(list: [Any]) -> [IndexPath] {
@@ -64,29 +80,6 @@ final class SearchCollectionAdapter: NSObject {
 		}
 
 		return array
-	}
-
-	public func insertItems(itemsList: [SearchCellModel]?) {
-		guard let list = itemsList else {
-			items = []
-			return
-		}
-
-		let updateItems = updateItemsList(list: list)
-
-		list.forEach({ model in
-			items.append(model)
-		})
-
-		DispatchQueue.main.async { [weak self] in
-			if updateItems.first?.row ?? 0 > 0 {
-				self?.collectionView?.performBatchUpdates({ [weak self] in
-					self?.collectionView?.insertItems(at: updateItems)
-				}, completion: { _ in })
-			} else {
-				self?.collectionView?.reloadData()
-			}
-		}
 	}
 
 	private let reuseIdentifier = "Cell"

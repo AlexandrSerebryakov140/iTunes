@@ -13,7 +13,6 @@
 		A812CD882695C456001D8736 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = A812CD872695C456001D8736 /* Router.swift */; };
 		A812CD8A2695CB4D001D8736 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A812CD892695CB4D001D8736 /* SearchViewModel.swift */; };
 		A812CD8C2695CFAB001D8736 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A812CD8B2695CFAB001D8736 /* SearchCell.swift */; };
-		A812CD912695FE59001D8736 /* SearchCounterLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A812CD902695FE59001D8736 /* SearchCounterLabel.swift */; };
 		A812CD93269615D4001D8736 /* SearchCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A812CD92269615D4001D8736 /* SearchCellModel.swift */; };
 		A8131B2D2699ABE000AB0A53 /* SearchCellLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8131B2C2699ABE000AB0A53 /* SearchCellLayout.swift */; };
 		A8131B2F2699AD1000AB0A53 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8131B2E2699AD1000AB0A53 /* PreviewViewController.swift */; };
@@ -46,7 +45,6 @@
 		A812CD872695C456001D8736 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		A812CD892695CB4D001D8736 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		A812CD8B2695CFAB001D8736 /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
-		A812CD902695FE59001D8736 /* SearchCounterLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCounterLabel.swift; sourceTree = "<group>"; };
 		A812CD92269615D4001D8736 /* SearchCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellModel.swift; sourceTree = "<group>"; };
 		A8131B2C2699ABE000AB0A53 /* SearchCellLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellLayout.swift; sourceTree = "<group>"; };
 		A8131B2E2699AD1000AB0A53 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
@@ -91,7 +89,6 @@
 				A86875972695B356008C7D1D /* SearchViewController.swift */,
 				A86374BA26BC937800FFAAF0 /* SearchCollectionAdapter.swift */,
 				A812CD892695CB4D001D8736 /* SearchViewModel.swift */,
-				A812CD902695FE59001D8736 /* SearchCounterLabel.swift */,
 				A81604352697350200551C97 /* SearchToast.swift */,
 				A8131B332699AD5200AB0A53 /* Cell */,
 			);
@@ -289,7 +286,6 @@
 				A8131B322699AD4300AB0A53 /* PreviewViewModel.swift in Sources */,
 				A816043C26973F2900551C97 /* ImageCache.swift in Sources */,
 				A812CD8C2695CFAB001D8736 /* SearchCell.swift in Sources */,
-				A812CD912695FE59001D8736 /* SearchCounterLabel.swift in Sources */,
 				A812CD882695C456001D8736 /* Router.swift in Sources */,
 				A8C6512C269F418F007C2751 /* PreviewViewControllerLayout.swift in Sources */,
 				A816043826973DBA00551C97 /* SearchError.swift in Sources */,
