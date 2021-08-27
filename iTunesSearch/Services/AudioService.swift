@@ -8,12 +8,12 @@
 import AudioToolbox
 import AVFoundation
 
-final class TrackPreviewAudio: NSObject {
+final class AudioService: NSObject {
 	private var audioPlayer: AVAudioPlayer?
 	public var updateState: (TrackPlayerState) -> Void = { _ in }
 	public var updateTime: (String, Float) -> Void = { _, _ in }
 
-	func startAudioPlayer(_ previewFileURL: URL!) {
+	func startAudioPlayer(_ previewFileURL: URL?) {
 		guard let preview = previewFileURL else { return }
 
 		do {
@@ -44,10 +44,7 @@ final class TrackPreviewAudio: NSObject {
 	private var playerTimer: Timer?
 
 	private func runTimer() {
-		playerTimer = Timer.scheduledTimer(
-			withTimeInterval: 0.05,
-			repeats: true
-		) { [weak self] _ in
+		playerTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
 			self?.updatePlayerTime()
 		}
 	}
@@ -71,7 +68,7 @@ final class TrackPreviewAudio: NSObject {
 
 // MARK: - AVAudioPlayerDelegate
 
-extension TrackPreviewAudio: AVAudioPlayerDelegate {
+extension AudioService: AVAudioPlayerDelegate {
 	func audioPlayerDidFinishPlaying(_: AVAudioPlayer, successfully _: Bool) {
 		stopPlay()
 	}

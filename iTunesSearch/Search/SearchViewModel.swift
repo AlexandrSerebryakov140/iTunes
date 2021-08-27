@@ -11,7 +11,7 @@ import UIKit
 protocol SearchViewModel: AnyObject {
 	var searchBegin: () -> Void { get set }
 	var searchComplete: ([SearchCellModel]?) -> Void { get set }
-	var showMessage: (String) -> Void { get set }
+	var showMessage: (Bool, String) -> Void { get set }
 
 	func start()
 	func search(_ text: String)
@@ -22,7 +22,7 @@ protocol SearchViewModel: AnyObject {
 class SearchViewModelImpl: SearchViewModel {
 	public var searchBegin: () -> Void = {}
 	public var searchComplete: ([SearchCellModel]?) -> Void = { _ in }
-	public var showMessage: (String) -> Void = { _ in }
+	public var showMessage: (Bool, String) -> Void = { _, _ in }
 
 	private let searchService: SearchService
 	private let router: Router
@@ -44,12 +44,12 @@ class SearchViewModelImpl: SearchViewModel {
 
 		if text.isEmpty {
 			clearList()
-			showMessage("Введите ключевые слова в строке поиска")
+			showMessage(false, "Введите ключевые слова в строке поиска")
 			return
 		}
 		if text.count < 5 {
 			clearList()
-			showMessage("В запросе должно быть не менее 5 символов")
+			showMessage(false, "В запросе должно быть не менее 5 символов")
 			return
 		}
 
@@ -61,7 +61,7 @@ class SearchViewModelImpl: SearchViewModel {
 				self?.createList(list: list, request: text)
 			case let .failure(error):
 				self?.clearList()
-				self?.showMessage(error.text())
+				self?.showMessage(true, error.text())
 			}
 		})
 	}
@@ -90,25 +90,20 @@ class SearchViewModelImpl: SearchViewModel {
 
 	// MARK: - Работа со списком
 
-	private func addItems(list: iTunesList) {
-		list.results.forEach { [weak self] item in
-			self?.items.append(item)
-		}
-
-		searchComplete(list.results.map { SearchCellModel($0) })
-	}
-
 	private func createList(list: iTunesList, request: String) {
 		Logger.log(state: .info, message: "По запросу '\(request)' получено \(list.results.count) треков")
 
 		clearList()
 		lastSearch = request
-		addItems(list: list)
+		items.append(contentsOf: list.results)
+		searchComplete(list.results.map { $0.toCellModel() })
 	}
 
 	private func updateList(list: iTunesList) {
 		Logger.log(state: .info, message: "Добавлено ещё \(list.results.count) треков")
-		addItems(list: list)
+
+		items.append(contentsOf: list.results)
+		searchComplete(list.results.map { $0.toCellModel() })
 	}
 
 	private func clearList() {

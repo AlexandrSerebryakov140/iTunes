@@ -62,8 +62,8 @@ final class SearchViewController: UIViewController {
 			self?.update()
 		}
 
-		viewModel.showMessage = { [weak self] message in
-			SearchToast.show(message: message, controller: self!)
+		viewModel.showMessage = { [weak self] isError, message in
+			Toast.show(message: message, controller: self!, isError: isError)
 			self?.adapter.insertItems(nil)
 			self?.update()
 		}

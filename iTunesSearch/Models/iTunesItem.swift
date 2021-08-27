@@ -7,6 +7,10 @@
 
 import Foundation
 
+/**
+    # Основная структура списка, получаемого из iTunesSearch
+ */
+
 struct iTunesItem: Codable, Equatable, Hashable {
 	var type: String?
 	var wrapperType: String?
@@ -80,6 +84,11 @@ struct iTunesItem: Codable, Equatable, Hashable {
 }
 
 extension KeyedDecodingContainer {
+	/// Функция позволяет декодировать либо напрямую в строку либо переводить в строку цифры при получении типа Int
+	/// # Notes: #
+	/// Проблема парсера JSON в iOS состоит в том что строкой он считает только то, что в кавычках.
+	/// И в случае получения artistId вместо "12345678" просто 12345678 данные не распарсятся.
+	/// Данный метод позволяет это исправить
 	fileprivate func decodeForString(forKey key: KeyedDecodingContainer.Key) throws -> String {
 		do {
 			return try decode(String.self, forKey: key)
@@ -87,12 +96,5 @@ extension KeyedDecodingContainer {
 			let value = try decode(Int.self, forKey: key)
 			return String(describing: value)
 		}
-	}
-}
-
-extension iTunesItem {
-	// возвращает ссылку на обложку альбома в высоком разрешении
-	var artworkUrl600: String {
-		(artworkUrl100?.replacingOccurrences(of: "100x100", with: "600x600"))!
 	}
 }

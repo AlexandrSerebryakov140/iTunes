@@ -10,11 +10,7 @@ import UIKit
 // MARK: - Анимации
 
 extension UIView {
-	/**
-	 Rotate a view by specified degrees
-
-	 - parameter angle: angle in degrees
-	 */
+	/// Поворот UIView на указанный угол
 	func rotate(angle: CGFloat) {
 		let radians = angle / 180.0 * CGFloat.pi
 		let rotation = transform.rotated(by: radians)
@@ -22,6 +18,9 @@ extension UIView {
 	}
 
 	private static let kRotationAnimationKey = "rotationanimationkey"
+
+	/// # Начать вращение UIView с указанной скоростью
+	/// - parameter duration: скорость в единицах
 
 	func rotate(duration: Double = 1) {
 		if layer.animation(forKey: UIView.kRotationAnimationKey) == nil {
@@ -36,6 +35,7 @@ extension UIView {
 		}
 	}
 
+	/// Остановить вращение UIView
 	func stopRotating() {
 		if layer.animation(forKey: UIView.kRotationAnimationKey) != nil {
 			layer.removeAnimation(forKey: UIView.kRotationAnimationKey)

@@ -38,12 +38,12 @@ class PreviewViewModelImpl: PreviewViewModel {
 	private let item: iTunesItem
 	private let imageService: ImageService
 	private let router: Router
-	private var previewAudio: TrackPreviewAudio?
-	private let downloader: TrackDownloader
+	private var previewAudio: AudioService?
+	private var downloader: DownloadService
 	private weak var delegate: PreviewAudioDelegate?
 	private var state: TrackPlayerState = .none
 
-	init(router: Router, imageService: ImageService, downloader: TrackDownloader, item: iTunesItem) {
+	init(router: Router, imageService: ImageService, downloader: DownloadService, item: iTunesItem) {
 		self.router = router
 		self.imageService = imageService
 		self.downloader = downloader
@@ -70,7 +70,7 @@ class PreviewViewModelImpl: PreviewViewModel {
 			items.append(PreviewStackItem(text: track, fontSize: 24.0, color: .black))
 		}
 
-		if let time = SearchCellModel.trackLenght(item.trackTimeMillis) {
+		if let time = item.trackLenght {
 			items.append(PreviewStackItem(text: time, fontSize: 18.0, color: .darkGray))
 		}
 
@@ -94,7 +94,7 @@ class PreviewViewModelImpl: PreviewViewModel {
 	}
 
 	private func createPreviewAudio(_ audioDelegate: PreviewAudioDelegate) {
-		previewAudio = TrackPreviewAudio()
+		previewAudio = AudioService()
 		previewAudio?.updateState = { [weak self] state in
 			self?.state = state
 			self?.stateIsUpdate(state: state)

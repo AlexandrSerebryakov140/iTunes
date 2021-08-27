@@ -13,6 +13,8 @@ final class SearchCollectionAdapter: NSObject {
 	private weak var viewModel: SearchViewModel?
 	private let imageService: ImageService
 	private var items: [SearchCellModel] = []
+	private let reuseIdentifier = "Cell"
+	private var noArtworkImage = UIImage(.noArtwork)
 
 	init(viewModel: SearchViewModel, imageService: ImageService) {
 		self.viewModel = viewModel
@@ -42,10 +44,7 @@ final class SearchCollectionAdapter: NSObject {
 		}
 
 		let updateItems = updateItemsList(list: list)
-
-		list.forEach({ model in
-			items.append(model)
-		})
+		items.append(contentsOf: list)
 
 		if updateItems.first?.row ?? 0 > 0 {
 			reloadWithInsertItems(updateItems: updateItems)
@@ -81,9 +80,6 @@ final class SearchCollectionAdapter: NSObject {
 
 		return array
 	}
-
-	private let reuseIdentifier = "Cell"
-	private var noArtworkImage = UIImage(.noArtwork)
 }
 
 extension SearchCollectionAdapter: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

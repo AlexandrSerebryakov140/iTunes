@@ -8,15 +8,19 @@
 import Foundation
 import UIKit
 
+struct SearchCellModel {
+	let trackName: String?
+	let artistName: String?
+	let artworkUrl: String?
+	let trackLenght: String?
+}
+
 final class SearchCell: UICollectionViewCell {
 	private var artworkUrl: String?
 
 	private let artwork: UIImageView = {
 		let imageView = UIImageView(frame: .zero)
-		imageView.clipsToBounds = true
-		imageView.layer.borderColor = UIColor.lightGray.cgColor
-		imageView.layer.borderWidth = 0.8
-		imageView.layer.cornerRadius = 7
+		imageView.borderWithRadius(color: .lightGray, width: 0.8, radius: 7.0)
 		return imageView
 	}()
 

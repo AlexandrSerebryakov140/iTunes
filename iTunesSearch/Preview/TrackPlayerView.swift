@@ -46,20 +46,16 @@ final class TrackPlayerView: UIView {
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		commonInit()
+		setupView()
 	}
 
 	public func setupButton(_ target: Any?, action: Selector) {
 		playerButton.addTarget(target, action: action, for: [.touchUpInside])
 	}
 
-	private func commonInit() {
-		layer.borderColor = UIColor.white.cgColor
-		layer.borderWidth = 3.0
-		clipsToBounds = true
-		layer.cornerRadius = 10.0
+	private func setupView() {
+		borderWithRadius(color: .white, width: 3.0, radius: 10.0)
 		backgroundColor = UIColor(red: 1.00, green: 0.40, blue: 0.36, alpha: 1.0)
-
 		addSubview(playerButton)
 		addSubview(trackInfoLabel)
 		addSubview(progressView)

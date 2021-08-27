@@ -12,18 +12,12 @@ class Router {
 	private let session: URLSession
 	private let imageService: ImageService
 	private let searchService: SearchService
-	private let downloadService: TrackDownloader
-
-	private enum State {
-		case base
-	}
 
 	init() {
 		let queue = OperationQueue()
 		session = URLSession(configuration: .default, delegate: nil, delegateQueue: queue)
 		imageService = ImageServiceImpl(session: session, imageCache: ImageCache())
 		searchService = SearchServiceImpl(session: session)
-		downloadService = TrackDownloader()
 	}
 
 	private lazy var viewController: UINavigationController = {
@@ -38,7 +32,7 @@ class Router {
 	}
 
 	public func toPreview(item: iTunesItem) {
-		let downloadService = TrackDownloader()
+		let downloadService = DownloadServiceImpl()
 		let model = PreviewViewModelImpl(router: self, imageService: imageService, downloader: downloadService, item: item)
 		let controller = PreviewViewController(viewModel: model, layout: PreviewViewControllerLayout())
 		viewController.pushViewController(controller, animated: true)
