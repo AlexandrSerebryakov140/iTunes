@@ -20,15 +20,15 @@ final class TrackPlayerView: UIView {
 		let label = UILabel(frame: .zero)
 		label.text = "Загрузить фрагмент"
 		label.font = UIFont.systemFont(ofSize: 19.0, weight: .regular)
-		label.textColor = .white
+		label.textColor = DefaultStyle.Colors.white
 		return label
 	}()
 
 	private lazy var progressView: UIProgressView = {
 		let progress = UIProgressView(frame: .zero)
 		progress.progressViewStyle = .bar
-		progress.progressTintColor = .red
-		progress.trackTintColor = .white
+		progress.progressTintColor = DefaultStyle.Colors.red
+		progress.trackTintColor = DefaultStyle.Colors.white
 		progress.progress = 0.0
 		return progress
 	}()
@@ -54,8 +54,8 @@ final class TrackPlayerView: UIView {
 	}
 
 	private func setupView() {
-		borderWithRadius(color: .white, width: 3.0, radius: 10.0)
-		backgroundColor = UIColor(red: 1.00, green: 0.40, blue: 0.36, alpha: 1.0)
+		borderWithRadius(color: DefaultStyle.Colors.borderColor, width: 2.0, radius: 10.0)
+		backgroundColor = DefaultStyle.Colors.redBackground
 		addSubview(playerButton)
 		addSubview(trackInfoLabel)
 		addSubview(progressView)

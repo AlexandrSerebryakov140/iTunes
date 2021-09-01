@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct SearchCellModel {
+public struct SearchCellModel {
 	let trackName: String?
 	let artistName: String?
 	let artworkUrl: String?
@@ -20,14 +20,14 @@ final class SearchCell: UICollectionViewCell {
 
 	private let artwork: UIImageView = {
 		let imageView = UIImageView(frame: .zero)
-		imageView.borderWithRadius(color: .lightGray, width: 0.8, radius: 7.0)
+		imageView.borderWithRadius(color: DefaultStyle.Colors.lightGray, width: 0.8, radius: 7.0)
 		return imageView
 	}()
 
 	private let name: UILabel = {
 		let label = UILabel(frame: .zero)
 		label.font = UIFont.systemFont(ofSize: 19.0, weight: .regular)
-		label.textColor = .black
+		label.textColor = DefaultStyle.Colors.label
 		label.text = "Название трека"
 		return label
 	}()
@@ -35,7 +35,7 @@ final class SearchCell: UICollectionViewCell {
 	private let author: UILabel = {
 		let label = UILabel(frame: .zero)
 		label.font = UIFont.systemFont(ofSize: 15.0, weight: .regular)
-		label.textColor = .lightGray
+		label.textColor = DefaultStyle.Colors.lightGray
 		label.text = "Автор трека"
 		return label
 	}()
@@ -43,7 +43,7 @@ final class SearchCell: UICollectionViewCell {
 	private let time: UILabel = {
 		let label = UILabel(frame: .zero)
 		label.font = UIFont.systemFont(ofSize: 15.0, weight: .regular)
-		label.textColor = .lightGray
+		label.textColor = DefaultStyle.Colors.lightGray
 		label.text = "02:00"
 		return label
 	}()
@@ -85,9 +85,9 @@ final class SearchCell: UICollectionViewCell {
 	override var isSelected: Bool {
 		didSet {
 			if isSelected {
-				backgroundColor = .lightGray.withAlphaComponent(0.2)
+				backgroundColor = DefaultStyle.Colors.lightGray.withAlphaComponent(0.2)
 			} else {
-				backgroundColor = .white
+				backgroundColor = DefaultStyle.Colors.background
 			}
 		}
 	}

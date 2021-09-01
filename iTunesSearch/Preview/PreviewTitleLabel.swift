@@ -14,8 +14,8 @@ struct TitleLabelModel {
 	public let verticalAttributedText: NSAttributedString
 	public let verticalNumberOfLines: Int
 
-	private static let nameColor: UIColor = .darkGray
-	private static let stringColor: UIColor = .lightGray
+	private static let nameColor: UIColor = DefaultStyle.Colors.darkGray
+	private static let stringColor: UIColor = DefaultStyle.Colors.lightGray
 	private static let oneWordFont = UIFont.systemFont(ofSize: 19, weight: .semibold)
 
 	init(name: String?, album: String?) {

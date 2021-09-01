@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 final class Toast {
-	private static let textColor: UIColor = .white
-	private static let infoColor: UIColor = .black.withAlphaComponent(0.6)
+	private static let textColor: UIColor = DefaultStyle.Colors.background
+	private static let infoColor: UIColor = DefaultStyle.Colors.label.withAlphaComponent(0.6)
 	private static let errorColor: UIColor = .red.withAlphaComponent(0.6)
 
 	public static func show(message: String, controller: UIViewController, isError: Bool = false) {

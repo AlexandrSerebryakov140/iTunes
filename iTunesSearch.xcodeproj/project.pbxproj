@@ -30,6 +30,8 @@
 		A8673B5D26D8E0950019E486 /* iTunesItem+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8673B5C26D8E0950019E486 /* iTunesItem+Extension.swift */; };
 		A8673B5F26D8E5A40019E486 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8673B5E26D8E5A40019E486 /* UIView+Extension.swift */; };
 		A86875982695B356008C7D1D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86875972695B356008C7D1D /* SearchViewController.swift */; };
+		A87ECDFA26DF9F120072EB75 /* PreviewStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87ECDF926DF9F120072EB75 /* PreviewStack.swift */; };
+		A87ECDFC26DFEB630072EB75 /* DefaultStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87ECDFB26DFEB630072EB75 /* DefaultStyle.swift */; };
 		A887FCF326A3872500CC3D52 /* DownloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A887FCF226A3872500CC3D52 /* DownloadService.swift */; };
 		A8C6512C269F418F007C2751 /* PreviewViewControllerLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C6512B269F418F007C2751 /* PreviewViewControllerLayout.swift */; };
 		F46E6AE0267A466D00C30769 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E6ADF267A466D00C30769 /* AppDelegate.swift */; };
@@ -63,6 +65,8 @@
 		A8673B5C26D8E0950019E486 /* iTunesItem+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iTunesItem+Extension.swift"; sourceTree = "<group>"; };
 		A8673B5E26D8E5A40019E486 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		A86875972695B356008C7D1D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		A87ECDF926DF9F120072EB75 /* PreviewStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewStack.swift; sourceTree = "<group>"; };
+		A87ECDFB26DFEB630072EB75 /* DefaultStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultStyle.swift; sourceTree = "<group>"; };
 		A887FCF226A3872500CC3D52 /* DownloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadService.swift; sourceTree = "<group>"; };
 		A8C6512B269F418F007C2751 /* PreviewViewControllerLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewControllerLayout.swift; sourceTree = "<group>"; };
 		F46E6ADC267A466D00C30769 /* iTunesSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iTunesSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,6 +118,7 @@
 				A812CD872695C456001D8736 /* Router.swift */,
 				A816043E26976FB000551C97 /* Logger.swift */,
 				A81604352697350200551C97 /* Toast.swift */,
+				A87ECDFB26DFEB630072EB75 /* DefaultStyle.swift */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -124,6 +129,7 @@
 				A8131B2E2699AD1000AB0A53 /* PreviewViewController.swift */,
 				A8C6512B269F418F007C2751 /* PreviewViewControllerLayout.swift */,
 				A8131B312699AD4300AB0A53 /* PreviewViewModel.swift */,
+				A87ECDF926DF9F120072EB75 /* PreviewStack.swift */,
 				A809A32D269CAE6100519D6B /* TrackPlayerView.swift */,
 				A809A32B269CA82B00519D6B /* PreviewTitleLabel.swift */,
 			);
@@ -287,6 +293,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8131B322699AD4300AB0A53 /* PreviewViewModel.swift in Sources */,
+				A87ECDFA26DF9F120072EB75 /* PreviewStack.swift in Sources */,
 				A816043C26973F2900551C97 /* ImageCache.swift in Sources */,
 				A812CD8C2695CFAB001D8736 /* SearchCell.swift in Sources */,
 				A812CD882695C456001D8736 /* Router.swift in Sources */,
@@ -298,6 +305,7 @@
 				A809A334269CAECD00519D6B /* AudioService.swift in Sources */,
 				A81603D626972B7800551C97 /* iTunesItem.swift in Sources */,
 				A816043F26976FB000551C97 /* Logger.swift in Sources */,
+				A87ECDFC26DFEB630072EB75 /* DefaultStyle.swift in Sources */,
 				A8673B5F26D8E5A40019E486 /* UIView+Extension.swift in Sources */,
 				A81604362697350200551C97 /* Toast.swift in Sources */,
 				A86374BB26BC937800FFAAF0 /* SearchCollectionAdapter.swift in Sources */,
@@ -452,6 +460,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = F7TGF6Q5TD;
 				INFOPLIST_FILE = iTunesSearch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -471,6 +480,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = F7TGF6Q5TD;
 				INFOPLIST_FILE = iTunesSearch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (

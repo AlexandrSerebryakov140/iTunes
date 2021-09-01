@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct iTunesList: Codable {
+public struct iTunesList: Codable {
 	var resultCount: Int
 	var results: [iTunesItem]
 

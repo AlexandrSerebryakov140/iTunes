@@ -73,7 +73,7 @@ final class PreviewViewController: UIViewController {
 	}
 
 	private func setupView() {
-		view.backgroundColor = .white
+		view.backgroundColor = DefaultStyle.Colors.background
 		view.addSubview(imageView)
 		view.addSubview(stackView)
 		view.addSubview(trackPlayerView)
@@ -104,9 +104,8 @@ extension PreviewViewController {
 	private func updateStackView(items: [PreviewStackItem]) {
 		DispatchQueue.main.async { [weak self] in
 			items.forEach { item in
-				if let label = self?.addStackViewLabel(item) {
-					self?.stackView.addArrangedSubview(label)
-				}
+				let label = PreviewStack.stackViewLabel(item)
+				self?.stackView.addArrangedSubview(label)
 			}
 		}
 	}
@@ -118,17 +117,5 @@ extension PreviewViewController {
 				self?.updateNavigationBar(collection: collection)
 			}
 		}
-	}
-
-	private func addStackViewLabel(_ item: PreviewStackItem) -> UILabel {
-		let label = UILabel()
-		label.textColor = item.color
-		label.textAlignment = .center
-		label.font = .systemFont(ofSize: item.fontSize)
-		label.text = item.text
-		label.lineBreakMode = .byWordWrapping
-		label.numberOfLines = 0
-		label.adjustsFontSizeToFitWidth = true
-		return label
 	}
 }

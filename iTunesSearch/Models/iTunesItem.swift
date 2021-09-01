@@ -11,7 +11,7 @@ import Foundation
     # Основная структура списка, получаемого из iTunesSearch
  */
 
-struct iTunesItem: Codable, Equatable, Hashable {
+public struct iTunesItem: Codable, Equatable, Hashable {
 	var type: String?
 	var wrapperType: String?
 	var kind: String?

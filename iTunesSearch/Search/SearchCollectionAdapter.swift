@@ -24,7 +24,7 @@ final class SearchCollectionAdapter: NSObject {
 	public func setup(collectionView: UICollectionView) {
 		self.collectionView = collectionView
 		self.collectionView?.register(SearchCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-		self.collectionView?.backgroundColor = .white
+		self.collectionView?.backgroundColor = DefaultStyle.Colors.background
 		self.collectionView?.keyboardDismissMode = .onDrag
 		self.collectionView?.translatesAutoresizingMaskIntoConstraints = false
 
