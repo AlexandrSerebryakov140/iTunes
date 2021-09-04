@@ -8,64 +8,83 @@
 import Foundation
 import UIKit
 
+private enum HVType: Equatable {
+	case first
+	case second
+	case separate
+}
+
+private enum TitleLabelSizeClass: Equatable {
+	case horisontal
+	case vertical
+
+	private typealias aKey = NSAttributedString.Key
+	private typealias aFont = DefaultStyle.Fonts
+	private typealias aColor = DefaultStyle.Colors
+
+	private func firstFont() -> UIFont { self == .horisontal ? aFont.first13 : aFont.first16 }
+
+	private func secondFont() -> UIFont { self == .horisontal ? aFont.second13 : aFont.second16 }
+
+	private func firstColor() -> UIColor { aColor.darkGray }
+
+	private func secondColor() -> UIColor { aColor.lightGray }
+
+	private func color(type: HVType) -> UIColor {
+		switch type {
+		case .first: return firstColor()
+		case .second: return secondColor()
+		case .separate: return firstColor()
+		}
+	}
+
+	private func font(type: HVType) -> UIFont {
+		switch type {
+		case .first: return firstFont()
+		case .second: return secondFont()
+		case .separate: return firstFont()
+		}
+	}
+
+	func separate() -> String { self == .horisontal ? " - " : "\n" }
+
+	func aString(name: String, type: HVType) -> NSAttributedString {
+		let attr = [aKey.foregroundColor: color(type: type), aKey.font: font(type: type)]
+		return NSAttributedString(string: name, attributes: attr)
+	}
+}
+
 struct TitleLabelModel {
 	public var horizontalAttributedText: NSAttributedString
-	public let horizontalNumberOfLines: Int
+	public let horizontalNumberOfLines: Int = 1
 	public let verticalAttributedText: NSAttributedString
-	public let verticalNumberOfLines: Int
-
-	private static let nameColor: UIColor = DefaultStyle.Colors.darkGray
-	private static let stringColor: UIColor = DefaultStyle.Colors.lightGray
-	private static let oneWordFont = UIFont.systemFont(ofSize: 19, weight: .semibold)
+	public var verticalNumberOfLines: Int = 1
 
 	init(name: String?, album: String?) {
-		horizontalNumberOfLines = 1
-
 		if album != nil {
-			horizontalAttributedText = TitleLabelModel.twoWord(name: name, album: album, separate: " - ", fontSize: 13)
-			verticalAttributedText = TitleLabelModel.twoWord(name: name, album: album, separate: "\n", fontSize: 16)
+			horizontalAttributedText = TitleLabelModel.twoWord(name: name, album: album, data: .horisontal)
+			verticalAttributedText = TitleLabelModel.twoWord(name: name, album: album, data: .vertical)
 			verticalNumberOfLines = 2
 		} else {
 			horizontalAttributedText = TitleLabelModel.oneWord(name: name)
 			verticalAttributedText = TitleLabelModel.oneWord(name: name)
-			verticalNumberOfLines = 1
 		}
 	}
 
-	private static func aString(
-		name: String?,
-		font: UIFont,
-		color: UIColor
-	) -> NSAttributedString {
-		let string = name ?? ""
-		let attr = [
-			NSAttributedString.Key.foregroundColor: color,
-			NSAttributedString.Key.font: font,
-		]
-		return NSAttributedString(string: string, attributes: attr)
-	}
-
-	private static func twoWord(
-		name: String?,
-		album: String?,
-		separate: String,
-		fontSize: CGFloat
-	) -> NSAttributedString {
-		let firstFont = UIFont.systemFont(ofSize: fontSize, weight: .semibold)
-		let secondFont = UIFont.systemFont(ofSize: fontSize)
-		let firstString = aString(name: name, font: firstFont, color: nameColor)
-		let separateString = aString(name: separate, font: firstFont, color: nameColor)
-		let secondString = aString(name: album, font: secondFont, color: stringColor)
-
-		let attrString = NSMutableAttributedString(attributedString: firstString)
-		attrString.append(separateString)
-		attrString.append(secondString)
-
+	private static func twoWord(name: String?, album: String?, data: TitleLabelSizeClass) -> NSAttributedString {
+		let attrString = NSMutableAttributedString()
+		attrString.append(data.aString(name: name ?? "", type: .first))
+		attrString.append(data.aString(name: data.separate(), type: .separate))
+		attrString.append(data.aString(name: album ?? "", type: .second))
 		return attrString
 	}
 
 	private static func oneWord(name: String?) -> NSAttributedString {
-		aString(name: name, font: oneWordFont, color: nameColor)
+		typealias aKey = NSAttributedString.Key
+		let color = DefaultStyle.Colors.darkGray
+		let font = DefaultStyle.Fonts.semibold19
+		let attr = [aKey.foregroundColor: color, aKey.font: font]
+		return NSAttributedString(string: name ?? "", attributes: attr)
 	}
 }
 
@@ -85,12 +104,12 @@ final class PreviewTitleLabel: UILabel {
 		}
 	}
 
+	private func isHorizontal(_ horizontal: UIUserInterfaceSizeClass) -> Bool {
+		(horizontal == .regular) ? true : false
+	}
+
 	@available(*, unavailable)
 	required init?(coder _: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
-	}
-
-	private func isHorizontal(_ horizontal: UIUserInterfaceSizeClass) -> Bool {
-		(horizontal == .regular) ? true : false
 	}
 }
