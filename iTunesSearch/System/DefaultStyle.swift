@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 public enum DefaultStyle {
+	/// Сущность для поддержки темной темы
 	public enum Colors {
 		public static let white: UIColor = {
 			.white
@@ -48,6 +49,40 @@ public enum DefaultStyle {
 			} else {
 				return false
 			}
+		}()
+	}
+
+	public enum Fonts {
+		public static let system18: UIFont = {
+			UIFont.systemFont(ofSize: 18.0, weight: .regular)
+		}()
+
+		public static let semibold19: UIFont = {
+			UIFont.systemFont(ofSize: 19.0, weight: .semibold)
+		}()
+
+		public static let system15: UIFont = {
+			UIFont.systemFont(ofSize: 15.0, weight: .regular)
+		}()
+
+		public static let system19: UIFont = {
+			UIFont.systemFont(ofSize: 19.0, weight: .regular)
+		}()
+
+		public static let first13: UIFont = {
+			UIFont.systemFont(ofSize: 13.0, weight: .semibold)
+		}()
+
+		public static let first16: UIFont = {
+			UIFont.systemFont(ofSize: 16.0, weight: .semibold)
+		}()
+
+		public static let second13: UIFont = {
+			UIFont.systemFont(ofSize: 13.0, weight: .regular)
+		}()
+
+		public static let second16: UIFont = {
+			UIFont.systemFont(ofSize: 16.0, weight: .regular)
 		}()
 	}
 }

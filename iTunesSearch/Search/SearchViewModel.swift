@@ -40,13 +40,14 @@ class SearchViewModelImpl: SearchViewModel {
 	}
 
 	public func search(_ text: String) {
-		if lastSearch == text { return }
-
 		if text.isEmpty {
 			clearList()
 			showMessage(false, "Введите ключевые слова в строке поиска")
 			return
 		}
+
+		if lastSearch == text { return }
+
 		if text.count < 5 {
 			clearList()
 			showMessage(false, "В запросе должно быть не менее 5 символов")

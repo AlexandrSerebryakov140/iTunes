@@ -152,9 +152,9 @@
 				A816043726973DBA00551C97 /* SearchError.swift */,
 				A81603DA26972EC400551C97 /* SearchService.swift */,
 				A816043926973E7700551C97 /* ImageService.swift */,
+				A816043B26973F2900551C97 /* ImageCache.swift */,
 				A887FCF226A3872500CC3D52 /* DownloadService.swift */,
 				A809A333269CAECD00519D6B /* AudioService.swift */,
-				A816043B26973F2900551C97 /* ImageCache.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";

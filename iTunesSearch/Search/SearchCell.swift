@@ -26,7 +26,7 @@ final class SearchCell: UICollectionViewCell {
 
 	private let name: UILabel = {
 		let label = UILabel(frame: .zero)
-		label.font = UIFont.systemFont(ofSize: 19.0, weight: .regular)
+		label.font = DefaultStyle.Fonts.system19
 		label.textColor = DefaultStyle.Colors.label
 		label.text = "Название трека"
 		return label
@@ -34,7 +34,7 @@ final class SearchCell: UICollectionViewCell {
 
 	private let author: UILabel = {
 		let label = UILabel(frame: .zero)
-		label.font = UIFont.systemFont(ofSize: 15.0, weight: .regular)
+		label.font = DefaultStyle.Fonts.system15
 		label.textColor = DefaultStyle.Colors.lightGray
 		label.text = "Автор трека"
 		return label
@@ -42,7 +42,7 @@ final class SearchCell: UICollectionViewCell {
 
 	private let time: UILabel = {
 		let label = UILabel(frame: .zero)
-		label.font = UIFont.systemFont(ofSize: 15.0, weight: .regular)
+		label.font = DefaultStyle.Fonts.system15
 		label.textColor = DefaultStyle.Colors.lightGray
 		label.text = "02:00"
 		return label

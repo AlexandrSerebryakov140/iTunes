@@ -19,7 +19,7 @@ final class TrackPlayerView: UIView {
 	private lazy var trackInfoLabel: UILabel = {
 		let label = UILabel(frame: .zero)
 		label.text = "Загрузить фрагмент"
-		label.font = UIFont.systemFont(ofSize: 19.0, weight: .regular)
+		label.font = DefaultStyle.Fonts.system19
 		label.textColor = DefaultStyle.Colors.white
 		return label
 	}()

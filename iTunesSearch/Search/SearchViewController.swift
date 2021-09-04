@@ -32,7 +32,7 @@ final class SearchViewController: UIViewController {
 
 	private lazy var searchCounter: UILabel = {
 		let label = UILabel(frame: .zero)
-		label.font = UIFont.systemFont(ofSize: 18.0)
+		label.font = DefaultStyle.Fonts.system18
 		label.numberOfLines = 1
 		label.textAlignment = .center
 		label.isUserInteractionEnabled = false

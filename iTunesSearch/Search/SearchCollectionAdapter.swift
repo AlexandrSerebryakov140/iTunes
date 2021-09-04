@@ -13,6 +13,7 @@ final class SearchCollectionAdapter: NSObject {
 	private weak var viewModel: SearchViewModel?
 	private let imageService: ImageService
 	private var items: [SearchCellModel] = []
+
 	private let reuseIdentifier = "Cell"
 	private var noArtworkImage = UIImage(.noArtwork)
 
