@@ -16,7 +16,7 @@ public struct SearchCellModel {
 }
 
 final class SearchCell: UICollectionViewCell {
-	private var artworkUrl: String?
+	public var artworkUrl: String?
 
 	private let artwork: UIImageView = {
 		let imageView = UIImageView(frame: .zero)
@@ -61,18 +61,16 @@ final class SearchCell: UICollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	public func configureCell(_ cellModel: SearchCellModel, noArtworkImage: UIImage) {
+	public func configureCell(_ cellModel: SearchCellModel) {
 		artworkUrl = cellModel.artworkUrl
 		name.text = cellModel.trackName
 		author.text = cellModel.artistName
 		time.text = cellModel.trackLenght
-		artwork.image = noArtworkImage
 		layoutIfNeeded()
 	}
 
-	public func setupImage(image: UIImage, path: String) {
+	public func configureCellImage(_ image: UIImage) {
 		DispatchQueue.main.async { [weak self] in
-			if self?.artworkUrl != path { return }
 			self?.artwork.image = image
 			self?.layoutIfNeeded()
 		}

@@ -12,6 +12,7 @@ protocol SearchViewModel: AnyObject {
 	var searchBegin: () -> Void { get set }
 	var searchComplete: ([SearchCellModel]?) -> Void { get set }
 	var showMessage: (Bool, String) -> Void { get set }
+	var count: Int { get }
 
 	func start()
 	func search(_ text: String)
@@ -67,8 +68,12 @@ class SearchViewModelImpl: SearchViewModel {
 		})
 	}
 
+	public var count: Int {
+		items.count
+	}
+
 	public func checkIsLastItem(_ index: Int) {
-		guard index >= items.count - 1 else { return }
+		guard index >= items.count - 2 else { return }
 		guard !isUpdate else { return }
 
 		isUpdate = true

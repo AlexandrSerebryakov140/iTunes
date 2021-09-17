@@ -8,33 +8,33 @@
 import Foundation
 import UIKit
 
-final class SearchCollectionAdapter: NSObject {
-	private weak var collectionView: UICollectionView?
-	private weak var viewModel: SearchViewModel?
-	private let imageService: ImageService
+protocol CollectionAdapter: AnyObject {
+	var onSelectItem: (Int) -> Void { get set }
+	var willDisplayItem: (Int) -> Void { get set }
+	func setup(collectionView: UICollectionView)
+	func insertItems(_ itemsList: [SearchCellModel]?)
+}
+
+final class SearchCollectionAdapter: NSObject, CollectionAdapter {
+	public var onSelectItem: (Int) -> Void = { _ in }
+	public var willDisplayItem: (Int) -> Void = { _ in }
 	private var items: [SearchCellModel] = []
 
+	private weak var collectionView: UICollectionView?
+	private let imageService: ImageService
 	private let reuseIdentifier = "Cell"
-	private var noArtworkImage = UIImage(.noArtwork)
+	private lazy var noArtworkImage = UIImage(.noArtwork)
 
-	init(viewModel: SearchViewModel, imageService: ImageService) {
-		self.viewModel = viewModel
+	init(imageService: ImageService) {
 		self.imageService = imageService
 	}
 
 	public func setup(collectionView: UICollectionView) {
 		self.collectionView = collectionView
 		self.collectionView?.register(SearchCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-		self.collectionView?.backgroundColor = DefaultStyle.Colors.background
-		self.collectionView?.keyboardDismissMode = .onDrag
-		self.collectionView?.translatesAutoresizingMaskIntoConstraints = false
-
 		self.collectionView?.delegate = self
 		self.collectionView?.dataSource = self
-	}
-
-	public var count: Int {
-		items.count
+		self.collectionView?.keyboardDismissMode = .onDrag
 	}
 
 	public func insertItems(_ itemsList: [SearchCellModel]?) {
@@ -95,26 +95,23 @@ extension SearchCollectionAdapter: UICollectionViewDelegate, UICollectionViewDat
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! SearchCell
 		let cellModel = items[indexPath.row]
-		let noImage: UIImage = noArtworkImage.copy() as! UIImage
-		cell.configureCell(cellModel, noArtworkImage: noImage)
-		loadImage(artworkUrl: cellModel.artworkUrl) { [weak cell] image, path in
-			cell?.setupImage(image: image, path: path)
+		cell.configureCell(cellModel)
+		cell.configureCellImage(noArtworkImage)
+
+		imageService.download(path: cellModel.artworkUrl) { [weak cell] image, path in
+			if cell == nil { return }
+			if cell?.artworkUrl != path { return }
+			cell?.configureCellImage(image)
 		}
 		return cell
 	}
 
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		collectionView.cellForItem(at: indexPath)?.isSelected = true
-		viewModel?.toPreview(indexPath.row)
+		onSelectItem(indexPath.row)
 	}
 
 	func collectionView(_: UICollectionView, willDisplay _: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-		viewModel?.checkIsLastItem(indexPath.row)
-	}
-
-	public func loadImage(artworkUrl: String?, completion: @escaping (UIImage, String) -> Void) {
-		imageService.download(path: artworkUrl) { image, path in
-			completion(image, path)
-		}
+		willDisplayItem(indexPath.row)
 	}
 }

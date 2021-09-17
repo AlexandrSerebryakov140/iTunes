@@ -117,8 +117,8 @@
 				F46E6AE1267A466D00C30769 /* SceneDelegate.swift */,
 				A812CD872695C456001D8736 /* Router.swift */,
 				A816043E26976FB000551C97 /* Logger.swift */,
-				A81604352697350200551C97 /* Toast.swift */,
 				A87ECDFB26DFEB630072EB75 /* DefaultStyle.swift */,
+				A81604352697350200551C97 /* Toast.swift */,
 			);
 			path = System;
 			sourceTree = "<group>";

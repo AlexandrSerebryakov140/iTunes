@@ -22,7 +22,7 @@ class Router {
 
 	private lazy var viewController: UINavigationController = {
 		let viewModel = SearchViewModelImpl(router: self, searchService: searchService)
-		let adapter = SearchCollectionAdapter(viewModel: viewModel, imageService: imageService)
+		let adapter = SearchCollectionAdapter(imageService: imageService)
 		let searchViewController = SearchViewController(viewModel: viewModel, adapter: adapter)
 		return UINavigationController(rootViewController: searchViewController)
 	}()

@@ -9,6 +9,7 @@ import UIKit
 
 protocol PreviewAudioDelegate: AnyObject {
 	func playerBeginDownloadSong()
+	func playerCancelDownloadSong()
 	func playerBeginPlay()
 	func playerStopPlay()
 	func playerUpdateData(string: String, float: Float)
@@ -72,6 +73,14 @@ final class TrackPlayerView: UIView {
 // MARK: - PreviewAudioDelegate
 
 extension TrackPlayerView: PreviewAudioDelegate {
+	func playerCancelDownloadSong() {
+		DispatchQueue.main.async { [weak self] in
+			self?.trackInfoLabel.text = "Загрузить фрагмент"
+			self?.playerButton.stopRotating()
+			self?.progressView.progress = 0.0
+		}
+	}
+
 	func error() {
 		DispatchQueue.main.async { [weak self] in
 			self?.trackInfoLabel.text = "Error"

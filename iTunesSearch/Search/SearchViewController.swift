@@ -10,9 +10,9 @@ import UIKit
 
 final class SearchViewController: UIViewController {
 	let viewModel: SearchViewModel
-	let adapter: SearchCollectionAdapter
+	let adapter: CollectionAdapter
 
-	init(viewModel: SearchViewModel, adapter: SearchCollectionAdapter) {
+	init(viewModel: SearchViewModel, adapter: CollectionAdapter) {
 		self.viewModel = viewModel
 		self.adapter = adapter
 		super.init(nibName: nil, bundle: nil)
@@ -27,12 +27,14 @@ final class SearchViewController: UIViewController {
 		let viewLayout = UICollectionViewFlowLayout()
 		viewLayout.scrollDirection = .vertical
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: viewLayout)
+		collectionView.translatesAutoresizingMaskIntoConstraints = false
+		collectionView.backgroundColor = DefaultStyle.Colors.background
 		return collectionView
 	}()
 
-	private lazy var searchCounter: UILabel = {
+	private lazy var сounter: UILabel = {
 		let label = UILabel(frame: .zero)
-		label.font = DefaultStyle.Fonts.system18
+		label.font = DefaultStyle.Fonts.system15
 		label.numberOfLines = 1
 		label.textAlignment = .center
 		label.isUserInteractionEnabled = false
@@ -53,19 +55,27 @@ final class SearchViewController: UIViewController {
 		super.viewDidLoad()
 		setupView()
 
-		viewModel.searchBegin = { [weak self] in
-			self?.searching()
+		adapter.willDisplayItem = { [weak viewModel] index in
+			viewModel?.checkIsLastItem(index)
+		}
+
+		adapter.onSelectItem = { [weak viewModel] index in
+			viewModel?.toPreview(index)
+		}
+
+		viewModel.searchBegin = { [weak сounter] in
+			сounter?.searching()
 		}
 
 		viewModel.searchComplete = { [weak self] array in
 			self?.adapter.insertItems(array)
-			self?.update()
+			self?.сounter.update(array?.count)
 		}
 
 		viewModel.showMessage = { [weak self] isError, message in
 			Toast.show(message: message, controller: self!, isError: isError)
 			self?.adapter.insertItems(nil)
-			self?.update()
+			self?.сounter.update()
 		}
 
 		viewModel.start()
@@ -76,7 +86,7 @@ final class SearchViewController: UIViewController {
 		adapter.setup(collectionView: collectionView)
 
 		view.addSubview(collectionView)
-		view.addSubview(searchCounter)
+		view.addSubview(сounter)
 
 		navigationItem.searchController = search
 		navigationItem.hidesSearchBarWhenScrolling = false
@@ -87,26 +97,11 @@ final class SearchViewController: UIViewController {
 			collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
 			collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
 
-			searchCounter.widthAnchor.constraint(equalToConstant: 60),
-			searchCounter.heightAnchor.constraint(equalToConstant: 40),
-			searchCounter.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 10),
-			searchCounter.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 10),
+			сounter.widthAnchor.constraint(equalToConstant: 60),
+			сounter.heightAnchor.constraint(equalToConstant: 40),
+			сounter.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 10),
+			сounter.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 10),
 		])
-	}
-
-	private func update() {
-		DispatchQueue.main.async { [weak self] in
-			let count = self?.adapter.count ?? 0
-			self?.searchCounter.text = String(count)
-			self?.searchCounter.textColor = count == 0 ? .clear : .darkGray
-		}
-	}
-
-	private func searching() {
-		DispatchQueue.main.async { [weak self] in
-			self?.searchCounter.text = "!"
-			self?.searchCounter.textColor = .darkGray
-		}
 	}
 }
 
@@ -116,5 +111,21 @@ extension SearchViewController: UISearchBarDelegate, UISearchResultsUpdating {
 	func updateSearchResults(for searchController: UISearchController) {
 		guard let text = searchController.searchBar.text else { return }
 		viewModel.search(text)
+	}
+}
+
+extension UILabel {
+	fileprivate func update(_ count: Int? = 0) {
+		DispatchQueue.main.async { [weak self] in
+			self?.text = String(count ?? 0)
+			self?.textColor = count == 0 ? .clear : .darkGray
+		}
+	}
+
+	fileprivate func searching() {
+		DispatchQueue.main.async { [weak self] in
+			self?.text = "!"
+			self?.textColor = .darkGray
+		}
 	}
 }

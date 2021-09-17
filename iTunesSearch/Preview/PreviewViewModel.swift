@@ -109,7 +109,7 @@ class PreviewViewModelImpl: PreviewViewModel {
 		case .trackPlay:
 			previewAudio?.stopPlay()
 		case .trackIsDownloaded:
-			break
+			trackCancelDownload()
 		case .error:
 			break
 		}
@@ -134,13 +134,25 @@ class PreviewViewModelImpl: PreviewViewModel {
 		downloader.download(previewURL: previewUrl)
 	}
 
+	private func trackCancelDownload() {
+		guard let previewUrl = item.previewUrl else { return }
+
+		downloader.cancelDownload(previewURL: previewUrl)
+
+		state = .none
+	}
+
 	private func tackDownloadComplete(result: Result<URL, FileDownloadError>) {
 		switch result {
 		case let .success(url):
 			previewAudio?.startAudioPlayer(url)
 		case let .failure(error):
-			let err = String(describing: error.localizedDescription)
-			delegate?.playerUpdateData(string: "Error: \(err))", float: 0)
+			if error == .cancelled {
+				delegate?.playerCancelDownloadSong()
+			} else {
+				let err = String(describing: error.localizedDescription)
+				delegate?.playerUpdateData(string: "Ошибка: \(err))", float: 0)
+			}
 		}
 	}
 

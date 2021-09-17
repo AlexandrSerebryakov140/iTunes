@@ -32,8 +32,3 @@ public enum SearchError: Error, Equatable {
 		}
 	}
 }
-
-public enum FileDownloadError: Error, Equatable {
-	case error(NSError)
-	case url
-}
