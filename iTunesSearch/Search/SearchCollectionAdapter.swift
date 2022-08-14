@@ -12,7 +12,8 @@ protocol CollectionAdapter: AnyObject {
 	var onSelectItem: (Int) -> Void { get set }
 	var willDisplayItem: (Int) -> Void { get set }
 	func setup(collectionView: UICollectionView)
-	func insertItems(_ itemsList: [SearchCellModel]?)
+	func insertItems(_ itemsList: [SearchCellModel])
+	func clearItems()
 }
 
 final class SearchCollectionAdapter: NSObject, CollectionAdapter {
@@ -37,13 +38,12 @@ final class SearchCollectionAdapter: NSObject, CollectionAdapter {
 		self.collectionView?.keyboardDismissMode = .onDrag
 	}
 
-	public func insertItems(_ itemsList: [SearchCellModel]?) {
-		guard let list = itemsList else {
-			items = []
-			reload()
-			return
-		}
+	public func clearItems() {
+		items = []
+		reload()
+	}
 
+	public func insertItems(_ list: [SearchCellModel]) {
 		let updateItems = updateItemsList(list: list)
 		items.append(contentsOf: list)
 
@@ -102,6 +102,8 @@ extension SearchCollectionAdapter: UICollectionViewDelegate, UICollectionViewDat
 			if cell == nil { return }
 			if cell?.artworkUrl != path { return }
 			cell?.configureCellImage(image)
+		} failure: { error in
+			print(error)
 		}
 		return cell
 	}

@@ -53,20 +53,20 @@ struct PreviewViewControllerLayout {
 		let horizontal = collection.horizontalSizeClass
 		let vertical = collection.verticalSizeClass
 
-		if collection.userInterfaceIdiom == .pad { // для iPad
-			if !regularConstraints.isEmpty, regularConstraints[0].isActive {
-				NSLayoutConstraint.deactivate(regularConstraints)
+		func deactivate(_ constraints: [NSLayoutConstraint]) {
+			if !constraints.isEmpty, constraints[0].isActive {
+				NSLayoutConstraint.deactivate(constraints)
 			}
+		}
+
+		if collection.userInterfaceIdiom == .pad { // для iPad
+			deactivate(regularConstraints)
 			NSLayoutConstraint.activate(portraitConstraints)
 		} else if horizontal == .compact, vertical == .regular { // для портретной ориентации
-			if !regularConstraints.isEmpty, regularConstraints[0].isActive {
-				NSLayoutConstraint.deactivate(regularConstraints)
-			}
+			deactivate(regularConstraints)
 			NSLayoutConstraint.activate(portraitConstraints)
 		} else if horizontal == .regular || horizontal == .compact, vertical == .compact { // для ориентации .isLandscape
-			if !portraitConstraints.isEmpty, portraitConstraints[0].isActive {
-				NSLayoutConstraint.deactivate(portraitConstraints)
-			}
+			deactivate(portraitConstraints)
 			NSLayoutConstraint.activate(regularConstraints)
 		}
 	}

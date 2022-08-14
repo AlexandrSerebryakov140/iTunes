@@ -18,6 +18,19 @@ public struct SearchCellModel {
 final class SearchCell: UICollectionViewCell {
 	public var artworkUrl: String?
 
+	override init(frame _: CGRect) {
+		super.init(frame: .zero)
+		contentView.addSubview(artwork)
+		contentView.addSubview(name)
+		contentView.addSubview(author)
+		contentView.addSubview(time)
+	}
+
+	@available(*, unavailable)
+	required init?(coder _: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+
 	private let artwork: UIImageView = {
 		let imageView = UIImageView(frame: .zero)
 		imageView.borderWithRadius(color: DefaultStyle.Colors.lightGray, width: 0.8, radius: 7.0)
@@ -48,19 +61,6 @@ final class SearchCell: UICollectionViewCell {
 		return label
 	}()
 
-	override init(frame _: CGRect) {
-		super.init(frame: .zero)
-		contentView.addSubview(artwork)
-		contentView.addSubview(name)
-		contentView.addSubview(author)
-		contentView.addSubview(time)
-	}
-
-	@available(*, unavailable)
-	required init?(coder _: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-
 	public func configureCell(_ cellModel: SearchCellModel) {
 		artworkUrl = cellModel.artworkUrl
 		name.text = cellModel.trackName
@@ -82,11 +82,7 @@ final class SearchCell: UICollectionViewCell {
 
 	override var isSelected: Bool {
 		didSet {
-			if isSelected {
-				backgroundColor = DefaultStyle.Colors.lightGray.withAlphaComponent(0.2)
-			} else {
-				backgroundColor = DefaultStyle.Colors.background
-			}
+			backgroundColor = isSelected ? DefaultStyle.Colors.lightGray.withAlphaComponent(0.2) : DefaultStyle.Colors.background
 		}
 	}
 
@@ -108,5 +104,14 @@ final class SearchCell: UICollectionViewCell {
 		name.frame = layout.name
 		time.frame = layout.time
 		author.frame = layout.author
+	}
+}
+
+extension UIView {
+	public func borderWithRadius(color: UIColor, width: CGFloat, radius: CGFloat) {
+		layer.borderColor = color.cgColor
+		layer.borderWidth = width
+		clipsToBounds = true
+		layer.cornerRadius = radius
 	}
 }

@@ -12,27 +12,27 @@ import Foundation
  */
 
 public struct iTunesItem: Codable, Equatable, Hashable {
-	var type: String?
-	var wrapperType: String?
-	var kind: String?
-	var genreName: String?
-	var country: String?
-	var releaseDate: String?
-	var description: String?
-	var longDescription: String?
-	var artistName: String?
-	var collectionName: String?
-	var trackName: String?
-	var artistId: String?
-	var collectionId: Int?
-	var trackId: Int?
-	var trackTimeMillis: Int?
-	var trackCount: Int?
-	var trackNumber: Int?
-	var discCount: Int?
-	var discNumber: Int?
-	var artworkUrl100: String?
-	var previewUrl: String?
+	let type: String?
+	let wrapperType: String?
+	let kind: String?
+	let genreName: String?
+	let country: String?
+	let releaseDate: String?
+	let description: String?
+	let longDescription: String?
+	let artistName: String?
+	let collectionName: String?
+	let trackName: String?
+	let artistId: String?
+	let collectionId: Int?
+	let trackId: Int?
+	let trackTimeMillis: Int?
+	let trackCount: Int?
+	let trackNumber: Int?
+	let discCount: Int?
+	let discNumber: Int?
+	let artworkUrl100: String?
+	let previewUrl: String?
 
 	private enum CodingKeys: String, CodingKey {
 		case type

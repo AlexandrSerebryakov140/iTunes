@@ -8,8 +8,38 @@
 import Foundation
 import UIKit
 
+public enum ImageServiceError: Error, Equatable {
+	case error(NSError)
+	case text(String)
+	case request
+	case responce
+	case notFound(String)
+	case notUpdate
+
+	func text() -> String {
+		switch self {
+		case let .error(error):
+			return error.localizedDescription
+		case let .text(string):
+			return string
+		case .request:
+			return "Неправильный запрос"
+		case .responce:
+			return "Пустой ответ"
+		case let .notFound(search):
+			return "По запросу '\(search)' ничего не найдено"
+		case .notUpdate:
+			return "Больше элементов нет"
+		}
+	}
+}
+
 protocol ImageService {
-	func download(path: String?, completion: @escaping (_ image: UIImage, _ path: String) -> Void)
+	func download(
+		path: String?,
+		completion: @escaping (_ image: UIImage, _ path: String) -> Void,
+		failure: @escaping (_ error: ImageServiceError) -> Void
+	)
 }
 
 public final class ImageServiceImpl: ImageService {
@@ -21,7 +51,11 @@ public final class ImageServiceImpl: ImageService {
 		self.imageCache = imageCache
 	}
 
-	public func download(path: String?, completion: @escaping (_ image: UIImage, _ path: String) -> Void) {
+	public func download(
+		path: String?,
+		completion: @escaping (_ image: UIImage, _ path: String) -> Void,
+		failure _: @escaping (_ error: ImageServiceError) -> Void
+	) {
 		guard let downloadPath = path else {
 			Logger.log(state: .error, message: "URL: Путь к изображению отсутствует")
 			return

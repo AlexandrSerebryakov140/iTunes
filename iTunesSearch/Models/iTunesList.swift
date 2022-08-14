@@ -26,4 +26,12 @@ public struct iTunesList: Codable {
 		self.resultCount = try container.decode(Int.self, forKey: .resultCount)
 		self.results = try container.decode([iTunesItem].self, forKey: .results)
 	}
+
+	public static func create(data: Data) throws -> iTunesList {
+		do {
+			return try JSONDecoder().decode(iTunesList.self, from: data)
+		} catch {
+			throw error
+		}
+	}
 }

@@ -44,9 +44,17 @@ struct SearchCellLayout {
 
 extension UILabel {
 	fileprivate func size() -> CGSize {
-		guard let labelFont = font else { return CGSize(width: 0, height: 0) }
-		let fontAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: labelFont]
-		guard let size = text?.size(withAttributes: fontAttributes) else { return CGSize(width: 0, height: 0) }
+		func attributes(_ lFont: UIFont) -> [NSAttributedString.Key: Any] {
+			[NSAttributedString.Key.font: lFont]
+		}
+
+		guard let labelFont = font else {
+			return CGSize(width: 0, height: 0)
+		}
+
+		guard let size = text?.size(withAttributes: attributes(labelFont)) else {
+			return CGSize(width: 0, height: 0)
+		}
 		return size
 	}
 }

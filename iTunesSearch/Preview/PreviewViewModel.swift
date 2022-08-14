@@ -78,12 +78,18 @@ class PreviewViewModelImpl: PreviewViewModel {
 	private func downloadImage() {
 		// Загрузка из кэша маленькой картинки
 		guard let url100 = item.artworkUrl100 else { return }
+
 		imageService.download(path: url100) { [weak self] image, _ in
 			self?.updateImage(image)
+		} failure: { error in
+			print(error)
 		}
+
 		// Загрузка большой картинки
 		imageService.download(path: item.artworkUrl600) { [weak self] image, _ in
 			self?.updateImage(image)
+		} failure: { error in
+			print(error)
 		}
 	}
 

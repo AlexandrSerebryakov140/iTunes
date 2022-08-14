@@ -56,9 +56,9 @@ private enum TitleLabelSizeClass: Equatable {
 
 struct TitleLabelModel {
 	public var horizontalAttributedText: NSAttributedString
-	public let horizontalNumberOfLines: Int = 1
+	public let horizontalNumberOfLines = 1
 	public let verticalAttributedText: NSAttributedString
-	public var verticalNumberOfLines: Int = 1
+	public var verticalNumberOfLines = 1
 
 	init(name: String?, album: String?) {
 		if album != nil {

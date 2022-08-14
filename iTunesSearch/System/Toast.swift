@@ -13,11 +13,12 @@ final class Toast {
 	private static let infoColor: UIColor = DefaultStyle.Colors.label.withAlphaComponent(0.6)
 	private static let errorColor: UIColor = .red.withAlphaComponent(0.6)
 
-	public static func show(message: String, controller: UIViewController, isError: Bool = false) {
-		DispatchQueue.main.async {
+	public static func show(message: String, controller: UIViewController?, isError: Bool = false) {
+		DispatchQueue.main.async { [weak controller] in
+			guard let viewController = controller else { return }
 			let container = toastContainer(message: message, color: isError ? errorColor : infoColor)
-			controller.view.addSubview(container)
-			constraints(container: container, view: controller.view)
+			viewController.view.addSubview(container)
+			constraints(container: container, view: viewController.view)
 			animate(container: container)
 		}
 	}
