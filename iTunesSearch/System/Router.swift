@@ -16,8 +16,9 @@ class Router {
 	init() {
 		let queue = OperationQueue()
 		session = URLSession(configuration: .default, delegate: nil, delegateQueue: queue)
-		imageService = ImageServiceImpl(session: session, imageCache: ImageCache())
-		searchService = SearchServiceImpl(session: session)
+		let cache = ImageCache()
+		imageService = ImageServiceImpl(session: session, imageCache: cache)
+		searchService = SearchServiceImpl(session: session, decoder: JSONDecoder())
 	}
 
 	private lazy var viewController: UINavigationController = {

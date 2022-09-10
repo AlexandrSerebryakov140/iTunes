@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum SearchError: Error, Equatable {
+public enum SearchError: Error, Equatable, Logged {
 	case error(NSError)
 	case text(String)
 	case request
@@ -30,5 +30,9 @@ public enum SearchError: Error, Equatable {
 		case .notUpdate:
 			return "Больше элементов нет"
 		}
+	}
+
+	func toLog() -> String {
+		text()
 	}
 }
