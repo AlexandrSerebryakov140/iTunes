@@ -34,7 +34,7 @@ final class SearchViewController: UIViewController {
 	}
 
 	private func setupView() {
-		title = "iTunesSearch"
+		title = "iTunes поиск"
 		let search: UISearchController = {
 			let search = UISearchController(searchResultsController: nil)
 			search.searchResultsUpdater = self
