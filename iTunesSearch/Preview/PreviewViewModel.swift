@@ -62,7 +62,7 @@ class PreviewViewModelImpl: PreviewViewModel {
 	}
 
 	private func createPreviewAudio(_ audioDelegate: PreviewAudioDelegate) {
-		previewAudio = AudioService()
+		previewAudio = AudioServiceImpl()
 		previewAudio?.updateState = { [weak self] state in
 			self?.state = state
 			self?.stateIsUpdate(state: state)

@@ -7,14 +7,36 @@
 
 import Foundation
 
+public enum iTunesItemWrapperType: String, Codable, Equatable, Hashable {
+	case track
+	case collection
+	case artist
+	case audiobook
+}
+
+public enum iTunesItemKind: String, Codable, Equatable, Hashable {
+	case song
+	case book
+	case album
+	case artist
+	case coachedAudio = "coached-audio"
+	case featureMovie = "feature-movie"
+	case interactiveBooklet = "interactive-booklet"
+	case musicVideo = "music-video"
+	case pdfPodcast = "pdf-podcast"
+	case podcastEpisode = "podcast-episode"
+	case softwarePackage = "software-package"
+	case tvEpisode = "tv-episode"
+}
+
 /**
     # Основная структура списка, получаемого из iTunesSearch
  */
 
 public struct iTunesItem: Codable, Equatable, Hashable {
 	let type: String?
-	let wrapperType: String?
-	let kind: String?
+	let wrapperType: iTunesItemWrapperType?
+	let kind: iTunesItemKind?
 	let genreName: String?
 	let country: String?
 	let releaseDate: String?
@@ -61,8 +83,8 @@ public struct iTunesItem: Codable, Equatable, Hashable {
 
 		artistId = try? container.decodeForString(forKey: .artistId)
 		type = try? container.decode(String.self, forKey: .type)
-		wrapperType = try? container.decode(String.self, forKey: .wrapperType)
-		kind = try? container.decode(String.self, forKey: .kind)
+		wrapperType = try? container.decode(iTunesItemWrapperType.self, forKey: .wrapperType)
+		kind = try? container.decode(iTunesItemKind.self, forKey: .kind)
 		genreName = try? container.decode(String.self, forKey: .genreName)
 		country = try? container.decode(String.self, forKey: .country)
 		releaseDate = try? container.decode(String.self, forKey: .releaseDate)

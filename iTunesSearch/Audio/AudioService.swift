@@ -8,7 +8,16 @@
 import AudioToolbox
 import AVFoundation
 
-final class AudioService: NSObject {
+protocol AudioService {
+	func startAudioPlayer(_ previewFileURL: URL?)
+	func stopPlay()
+	func beginPlay()
+
+	var updateState: (TrackPlayerState) -> Void { get set }
+	var updateTime: (String, Float) -> Void { get set }
+}
+
+final class AudioServiceImpl: NSObject, AudioService {
 	private var audioPlayer: AVAudioPlayer?
 	public var updateState: (TrackPlayerState) -> Void = { _ in }
 	public var updateTime: (String, Float) -> Void = { _, _ in }
@@ -68,7 +77,7 @@ final class AudioService: NSObject {
 
 // MARK: - AVAudioPlayerDelegate
 
-extension AudioService: AVAudioPlayerDelegate {
+extension AudioServiceImpl: AVAudioPlayerDelegate {
 	func audioPlayerDidFinishPlaying(_: AVAudioPlayer, successfully _: Bool) {
 		stopPlay()
 	}
